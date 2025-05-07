@@ -1,15 +1,1335 @@
 @extends('layouts.admin.master')
 
-@section('title', 'Temukan Donasi - No Food Waste')
+@section('title', 'Cari Donasi - No Food Waste')
+
+@push('css')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="{{ asset('assets/css/nofoodwaste.css') }}">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<style>
+    .page-header {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-lg) var(--spacing-xl);
+        box-shadow: var(--shadow-md);
+        margin-bottom: var(--spacing-xl);
+        color: white;
+    }
+    
+    .page-header h3 {
+        font-weight: 700;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+        margin-bottom: 0;
+    }
+    
+    .breadcrumb-item a {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .breadcrumb-item.active {
+        color: white;
+    }
+    
+    .search-container {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: var(--spacing-xl);
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    .search-filters {
+        background: white;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        position: sticky;
+        top: 20px;
+        height: fit-content;
+    }
+    
+    .search-filters-header {
+        padding: var(--spacing-lg);
+        border-bottom: 1px solid var(--neutral-200);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .search-filters-title {
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+        color: var(--neutral-800);
+        margin: 0;
+    }
+    
+    .search-filters-reset {
+        font-size: var(--font-size-sm);
+        color: var(--primary);
+        font-weight: 500;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+    
+    .search-filters-reset i {
+        margin-right: var(--spacing-xs);
+    }
+    
+    .search-filters-reset:hover {
+        text-decoration: underline;
+    }
+    
+    .search-filters-body {
+        padding: var(--spacing-lg);
+    }
+    
+    .filter-group {
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .filter-group:last-child {
+        margin-bottom: 0;
+    }
+    
+    .filter-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: var(--spacing-xs);
+        color: var(--neutral-800);
+    }
+    
+    .range-inputs {
+        display: flex;
+        gap: var(--spacing-sm);
+        align-items: center;
+    }
+    
+    .range-dash {
+        color: var(--neutral-500);
+    }
+    
+    .btn-filter {
+        width: 100%;
+        margin-top: var(--spacing-md);
+    }
+    
+    .search-map-container {
+        background: white;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .search-map-header {
+        padding: var(--spacing-lg);
+        border-bottom: 1px solid var(--neutral-200);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .search-map-title {
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+        color: var(--neutral-800);
+        margin: 0;
+    }
+    
+    .search-map-actions {
+        display: flex;
+        gap: var(--spacing-sm);
+    }
+    
+    .search-map-action {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-full);
+        background: var(--neutral-100);
+        color: var(--neutral-700);
+        cursor: pointer;
+        transition: var(--transition-fast);
+    }
+    
+    .search-map-action:hover {
+        background: var(--neutral-200);
+    }
+    
+    .search-map-body {
+        padding: 0;
+    }
+    
+    .donation-map {
+        height: 400px;
+        width: 100%;
+    }
+    
+    .donation-results {
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .donation-results-header {
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        background: white;
+        box-shadow: var(--shadow-md);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .donation-results-title {
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+        color: var(--neutral-800);
+        margin: 0;
+    }
+    
+    .donation-results-count {
+        font-weight: 600;
+        color: var(--primary);
+    }
+    
+    .donation-results-sort {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+    }
+    
+    .donation-results-sort-label {
+        font-size: var(--font-size-sm);
+        color: var(--neutral-700);
+    }
+    
+    .donation-results-sort-select {
+        border: 1px solid var(--neutral-300);
+        border-radius: var(--radius-md);
+        padding: 0.25rem 0.5rem;
+        background-color: white;
+        color: var(--neutral-800);
+        font-size: var(--font-size-sm);
+    }
+    
+    .donation-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+    }
+    
+    .donation-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        transition: var(--transition-normal);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .donation-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .donation-image {
+        height: 200px;
+        position: relative;
+    }
+    
+    .donation-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .donation-status {
+        position: absolute;
+        top: var(--spacing-sm);
+        right: var(--spacing-sm);
+        padding: 0.2rem 0.6rem;
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        border-radius: var(--radius-full);
+        background: white;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .donation-status.available {
+        background: var(--success);
+        color: white;
+    }
+    
+    .donation-status.claimed {
+        background: var(--accent);
+        color: white;
+    }
+    
+    .donation-status.expired {
+        background: var(--danger);
+        color: white;
+    }
+    
+    .donation-distance {
+        position: absolute;
+        bottom: var(--spacing-sm);
+        left: var(--spacing-sm);
+        padding: 0.2rem 0.6rem;
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        border-radius: var(--radius-full);
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        display: flex;
+        align-items: center;
+    }
+    
+    .donation-distance i {
+        margin-right: var(--spacing-xs);
+        font-size: 0.75rem;
+    }
+    
+    .donation-body {
+        padding: var(--spacing-lg);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .donation-title {
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+        color: var(--neutral-800);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .donation-meta {
+        display: flex;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
+        color: var(--neutral-600);
+        font-size: var(--font-size-sm);
+    }
+    
+    .donation-meta-item {
+        display: flex;
+        align-items: center;
+    }
+    
+    .donation-meta-item i {
+        margin-right: var(--spacing-xs);
+    }
+    
+    .donation-description {
+        margin-bottom: var(--spacing-md);
+        color: var(--neutral-700);
+        flex: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .donation-footer {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .donation-donor {
+        display: flex;
+        align-items: center;
+    }
+    
+    .donation-donor-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: var (--radius-full);
+        margin-right: var(--spacing-xs);
+    }
+    
+    .donation-donor-name {
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        color: var(--neutral-700);
+    }
+    
+    .donation-action {
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        color: white;
+        background-color: var(--primary);
+        text-decoration: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: var(--radius-md);
+        transition: var(--transition-fast);
+    }
+    
+    .donation-action:hover {
+        color: white;
+        background-color: var(--primary-dark);
+    }
+    
+    .no-results {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-xl);
+        text-align: center;
+        box-shadow: var(--shadow-md);
+    }
+    
+    .no-results-icon {
+        font-size: 3rem;
+        color: var(--neutral-400);
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .no-results-title {
+        font-size: var(--font-size-xl);
+        font-weight: 600;
+        color: var(--neutral-800);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .no-results-text {
+        color: var(--neutral-600);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .custom-marker-popup .leaflet-popup-content-wrapper {
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-md);
+        padding: 0;
+        overflow: hidden;
+    }
+    
+    .custom-marker-popup .leaflet-popup-content {
+        margin: 0;
+        width: 250px !important;
+    }
+    
+    .map-popup {
+        padding: 0;
+    }
+    
+    .map-popup-image {
+        height: 120px;
+        width: 100%;
+    }
+    
+    .map-popup-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .map-popup-content {
+        padding: var(--spacing-md);
+    }
+    
+    .map-popup-title {
+        font-weight: 600;
+        font-size: var(--font-size-base);
+        margin-bottom: var(--spacing-xs);
+        color: var(--neutral-800);
+    }
+    
+    .map-popup-meta {
+        font-size: var(--font-size-sm);
+        color: var(--neutral-600);
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .map-popup-meta span {
+        display: inline-flex;
+        align-items: center;
+        margin-right: var(--spacing-sm);
+    }
+    
+    .map-popup-meta i {
+        margin-right: 3px;
+        font-size: 0.75rem;
+    }
+    
+    .map-popup-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .map-popup-distance {
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        color: var(--primary);
+    }
+    
+    .map-popup-action {
+        font-size: var(--font-size-sm);
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .map-popup-action:hover {
+        text-decoration: underline;
+    }
+    
+    /* Mobile Filters */
+    .mobile-filters-toggle {
+        position: fixed;
+        bottom: var(--spacing-lg);
+        right: var(--spacing-lg);
+        width: 56px;
+        height: 56px;
+        border-radius: var(--radius-full);
+        background: var(--primary);
+        color: white;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-lg);
+        z-index: 100;
+        cursor: pointer;
+    }
+    
+    .mobile-filters {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        z-index: 1000;
+        display: none;
+        overflow-y: auto;
+    }
+    
+    .mobile-filters-header {
+        padding: var(--spacing-lg);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--neutral-200);
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 10;
+    }
+    
+    .mobile-filters-title {
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+        color: var(--neutral-800);
+        margin: 0;
+    }
+    
+    .mobile-filters-close {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-full);
+        background: var(--neutral-100);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--neutral-800);
+        cursor: pointer;
+    }
+    
+    .mobile-filters-body {
+        padding: var(--spacing-lg);
+    }
+    
+    .mobile-filters-actions {
+        padding: var(--spacing-lg);
+        display: flex;
+        gap: var(--spacing-md);
+        border-top: 1px solid var(--neutral-200);
+        position: sticky;
+        bottom: 0;
+        background: white;
+        z-index: 10;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .search-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .search-filters {
+            display: none;
+        }
+        
+        .mobile-filters-toggle {
+            display: flex;
+        }
+        
+        .donation-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .donation-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .donation-results-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+        }
+        
+        .donation-results-sort {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+</style>
+@endpush
 
 @section('content')
-    <section class="find-donations-section">
-        <div class="find-donations-content">
-            <h1>Temukan Donasi Makanan Terdekat</h1>
-            <p>Gunakan peta untuk menemukan makanan yang dapat Anda ambil dan donasikan kepada yang membutuhkan.</p>
-
-            <!-- Tambahkan fitur pencarian atau peta di sini -->
-            <div id="map"></div> <!-- Misalnya menggunakan peta interaktif -->
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="page-header-left">
+                    <h3>Cari Donasi Makanan</h3>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                        <li class="breadcrumb-item active">Cari Donasi</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="d-flex justify-content-end">
+                    <div class="input-group" style="max-width: 400px;">
+                        <input type="text" class="form-control" id="searchKeyword" placeholder="Cari donasi makanan...">
+                        <button class="btn btn-light" type="button" id="searchBtn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
+    
+    <div class="search-container">
+        <!-- Search Filters Sidebar -->
+        <div class="search-filters">
+            <div class="search-filters-header">
+                <h4 class="search-filters-title">Filter</h4>
+                <a href="#" class="search-filters-reset" id="resetFilters">
+                    <i class="fas fa-redo-alt"></i> Reset
+                </a>
+            </div>
+            <div class="search-filters-body">
+                <form id="filterForm">
+                    <div class="filter-group">
+                        <label class="filter-label">Kategori Makanan</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="all" id="categoryAll" checked>
+                            <label class="form-check-label" for="categoryAll">
+                                Semua Kategori
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="makanan-siap-saji" id="categorySiapSaji">
+                            <label class="form-check-label" for="categorySiapSaji">
+                                Makanan Siap Saji
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="bahan-makanan" id="categoryBahan">
+                            <label class="form-check-label" for="categoryBahan">
+                                Bahan Makanan
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="roti-kue" id="categoryRoti">
+                            <label class="form-check-label" for="categoryRoti">
+                                Roti & Kue
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="buah-sayur" id="categoryBuah">
+                            <label class="form-check-label" for="categoryBuah">
+                                Buah & Sayur
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="makanan-kaleng" id="categoryKaleng">
+                            <label class="form-check-label" for="categoryKaleng">
+                                Makanan Kaleng
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="minuman" id="categoryMinuman">
+                            <label class="form-check-label" for="categoryMinuman">
+                                Minuman
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Jarak (km)</label>
+                        <div class="range-inputs">
+                            <input type="number" class="form-control" id="distanceMin" placeholder="Min" min="0" max="100">
+                            <span class="range-dash">-</span>
+                            <input type="number" class="form-control" id="distanceMax" placeholder="Max" min="0" max="100">
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Status</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="status" id="statusAll" value="all" checked>
+                            <label class="form-check-label" for="statusAll">
+                                Semua
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="status" id="statusAvailable" value="available">
+                            <label class="form-check-label" for="statusAvailable">
+                                Tersedia
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Waktu Pengambilan</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="pickupDate" placeholder="Pilih tanggal">
+                            <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Kuantitas Minimum</label>
+                        <input type="number" class="form-control" id="quantityMin" placeholder="Jumlah minimum" min="1">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-filter" id="applyFilters">
+                        <i class="fas fa-filter me-2"></i>Terapkan Filter
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="search-content">
+            <!-- Map View -->
+            <div class="search-map-container">
+                <div class="search-map-header">
+                    <h4 class="search-map-title">Peta Donasi</h4>
+                    <div class="search-map-actions">
+                        <div class="search-map-action" id="centerMap" title="Pusatkan Peta">
+                            <i class="fas fa-crosshairs"></i>
+                        </div>
+                        <div class="search-map-action" id="toggleFullMap" title="Perbesar Peta">
+                            <i class="fas fa-expand"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-map-body">
+                    <div id="donationMap" class="donation-map"></div>
+                </div>
+            </div>
+            
+            <!-- Donation Results -->
+            <div class="donation-results">
+                <div class="donation-results-header">
+                    <h4 class="donation-results-title">Hasil Pencarian <span class="donation-results-count">(24)</span></h4>
+                    <div class="donation-results-sort">
+                        <span class="donation-results-sort-label">Urutkan:</span>
+                        <select class="donation-results-sort-select" id="sortResults">
+                            <option value="nearest">Terdekat</option>
+                            <option value="newest">Terbaru</option>
+                            <option value="expiry">Kedaluwarsa Terdekat</option>
+                            <option value="quantity-high">Jumlah (Tertinggi)</option>
+                            <option value="quantity-low">Jumlah (Terendah)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="donation-grid">
+                    <!-- Donation Card 1 -->
+                    <div class="donation-card">
+                        <div class="donation-image">
+                            <img src="{{ asset('assets/images/food1.jpg') }}" alt="Nasi Kotak">
+                            <div class="donation-status available">Tersedia</div>
+                            <div class="donation-distance">
+                                <i class="fas fa-map-marker-alt"></i> 1.2 km
+                            </div>
+                        </div>
+                        <div class="donation-body">
+                            <h4 class="donation-title">Nasi Kotak Sisa Event</h4>
+                            <div class="donation-meta">
+                                <div class="donation-meta-item">
+                                    <i class="fas fa-calendar"></i> Kedaluwarsa: 8 Jam
+                                </div>
+                                <div class="donation-meta-item">
+                                    <i class="fas fa-box"></i> 25 Porsi
+                                </div>
+                            </div>
+                            <p class="donation-description">
+                                Nasi kotak dengan lauk ayam, sayur dan kerupuk. Masih baru dan layak konsumsi, sisa dari acara seminar yang baru selesai siang ini. Perlu diambil segera.
+                            </p>
+                            <div class="donation-footer">
+                                <div class="donation-donor">
+                                    <img src="{{ asset('assets/images/user1.jpg') }}" alt="Donor" class="donation-donor-avatar">
+                                    <span class="donation-donor-name">PT Seminar Indonesia</span>
+                                </div>
+                                <a href="#" class="donation-action">Ambil</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Donation Card 2 -->
+                    <div class="donation-card">
+                        <div class="donation-image">
+                            <img src="{{ asset('assets/images/food2.jpg') }}" alt="Roti dan Kue">
+                            <div class="donation-status available">Tersedia</div>
+                            <div class="donation-distance">
+                                <i class="fas fa-map-marker-alt"></i> 2.5 km
+                            </div>
+                        </div>
+                        <div class="donation-body">
+                            <h4 class="donation-title">Aneka Roti dan Kue</h4>
+                            <div class="donation-meta">
+                                <div class="donation-meta-item">
+                                    <i class="fas fa-calendar"></i> Kedaluwarsa: 2 Hari
+                                </div>
+                                <div class="donation-meta-item">
+                                    <i class="fas fa-box"></i> 15 Item
+                                </div>
+                            </div>
+                            <p class="donation-description">
+                                Berbagai jenis roti dan kue dari toko kami yang tidak terjual hari ini. Masih segar dan lezat. Termasuk roti manis, donat, dan beberapa kue tradisional.
+                            </p>
+                            <div class="donation-footer">
+                                <div class="donation-donor">
+                                    <img src="{{ asset('assets/images/user2.jpg') }}" alt="Donor" class="donation-donor-avatar">
+                                    <span class="donation-donor-name">Bakery Delicious</span>
+                                </div>
+                                <a href="#" class="donation-action">Ambil</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Donation Card 3 -->
+                    <div class="donation-card">
+                        <div class="donation-image">
+                            <img src="{{ asset('assets/images/food3.jpg') }}" alt="Sayuran Segar">
+                            <div class="donation-status available">Tersedia</div>
+                            <div class="donation-distance">
+                                <i class="fas fa-map-marker-alt"></i> 3.8 km
+                            </div>
+                        </div>
+                        <div class="donation-body">
+                            <h4 class="donation-title">Sayuran Organik Segar</h4>
+                            <div class="donation-meta">
+                                <div class="donation-meta-item">
+                                    <i class="fas fa-calendar"></i> Kedaluwarsa: 3 Hari
+                                </div>
+                                <div class="donation-meta-item">
+                                    <i class="fas fa-box"></i> 8 Kg
+                                </div>
+                            </div>
+                            <p class="donation-description">
+                                Sayuran organik segar dari kebun kami, termasuk wortel, bayam, dan kangkung. Dipanen pagi ini dan masih sangat segar. Cocok untuk diolah hari ini atau besok.
+                            </p>
+                            <div class="donation-footer">
+                                <div class="donation-donor">
+                                    <img src="{{ asset('assets/images/user3.jpg') }}" alt="Donor" class="donation-donor-avatar">
+                                    <span class="donation-donor-name">Kebun Sayur Bahagia</span>
+                                </div>
+                                <a href="#" class="donation-action">Ambil</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Donation Card 4 -->
+                    <div class="donation-card">
+                        <div class="donation-image">
+                            <img src="{{ asset('assets/images/food4.jpg') }}" alt="Buah-buahan Segar">
+                            <div class="donation-status available">Tersedia</div>
+                            <div class="donation-distance">
+                                <i class="fas fa-map-marker-alt"></i> 5.1 km
+                            </div>
+                        </div>
+                        <div class="donation-body">
+                            <h4 class="donation-title">Buah-buahan Segar</h4>
+                            <div class="donation-meta">
+                                <div class="donation-meta-item">
+                                    <i class="fas fa-calendar"></i> Kedaluwarsa: 4 Hari
+                                </div>
+                                <div class="donation-meta-item">
+                                    <i class="fas fa-box"></i> 12 Kg
+                                </div>
+                            </div>
+                            <p class="donation-description">
+                                Berbagai buah segar termasuk pisang, apel, dan jeruk. Buah-buahan ini masih dalam kondisi baik dan segar, tapi kami punya stok berlebih yang perlu segera didistribusikan.
+                            </p>
+                            <div class="donation-footer">
+                                <div class="donation-donor">
+                                    <img src="{{ asset('assets/images/user4.jpg') }}" alt="Donor" class="donation-donor-avatar">
+                                    <span class="donation-donor-name">Toko Buah Sehat</span>
+                                </div>
+                                <a href="#" class="donation-action">Ambil</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Donation Card 5 -->
+                    <div class="donation-card">
+                        <div class="donation-image">
+                            <img src="{{ asset('assets/images/food5.jpg') }}" alt="Menu Catering Sisa">
+                            <div class="donation-status available">Tersedia</div>
+                            <div class="donation-distance">
+                                <i class="fas fa-map-marker-alt"></i> 4.3 km
+                            </div>
+                        </div>
+                        <div class="donation-body">
+                            <h4 class="donation-title">Menu Catering Sisa</h4>
+                            <div class="donation-meta">
+                                <div class="donation-meta-item">
+                                    <i class="fas fa-calendar"></i> Kedaluwarsa: 10 Jam
+                                </div>
+                                <div class="donation-meta-item">
+                                    <i class="fas fa-box"></i> 18 Porsi
+                                </div>
+                            </div>
+                            <p class="donation-description">
+                                Menu catering lengkap yang tersisa dari acara kantor. Menu termasuk nasi, ayam, sayur, dan lauk pendamping. Makanan masih dalam keadaan hangat dan baru saja selesai disajikan.
+                            </p>
+                            <div class="donation-footer">
+                                <div class="donation-donor">
+                                    <img src="{{ asset('assets/images/user5.jpg') }}" alt="Donor" class="donation-donor-avatar">
+                                    <span class="donation-donor-name">Catering Lezat</span>
+                                </div>
+                                <a href="#" class="donation-action">Ambil</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Donation Card 6 -->
+                    <div class="donation-card">
+                        <div class="donation-image">
+                            <img src="{{ asset('assets/images/food6.jpg') }}" alt="Makanan Kaleng">
+                            <div class="donation-status available">Tersedia</div>
+                            <div class="donation-distance">
+                                <i class="fas fa-map-marker-alt"></i> 6.7 km
+                            </div>
+                        </div>
+                        <div class="donation-body">
+                            <h4 class="donation-title">Makanan Kaleng Berlebih</h4>
+                            <div class="donation-meta">
+                                <div class="donation-meta-item">
+                                    <i class="fas fa-calendar"></i> Kedaluwarsa: 6 Bulan
+                                </div>
+                                <div class="donation-meta-item">
+                                    <i class="fas fa-box"></i> 24 Kaleng
+                                </div>
+                            </div>
+                            <p class="donation-description">
+                                Berbagai makanan kaleng yang masih jauh dari tanggal kedaluwarsa. Termasuk sarden, kornet, dan beberapa sayuran kaleng. Semua kemasan masih utuh dan belum dibuka.
+                            </p>
+                            <div class="donation-footer">
+                                <div class="donation-donor">
+                                    <img src="{{ asset('assets/images/user6.jpg') }}" alt="Donor" class="donation-donor-avatar">
+                                    <span class="donation-donor-name">Minimarket 24 Jam</span>
+                                </div>
+                                <a href="#" class="donation-action">Ambil</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination-container mt-4">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">4</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Filters Toggle Button -->
+<div class="mobile-filters-toggle" id="showMobileFilters">
+    <i class="fas fa-filter"></i>
+</div>
+
+<!-- Mobile Filters Panel -->
+<div class="mobile-filters" id="mobileFiltersPanel">
+    <div class="mobile-filters-header">
+        <h4 class="mobile-filters-title">Filter</h4>
+        <div class="mobile-filters-close" id="closeMobileFilters">
+            <i class="fas fa-times"></i>
+        </div>
+    </div>
+    <div class="mobile-filters-body">
+        <!-- Copy of the same filter form here -->
+        <form id="mobileFilterForm">
+            <div class="filter-group">
+                <label class="filter-label">Kategori Makanan</label>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" value="all" id="mobileCategoryAll" checked>
+                    <label class="form-check-label" for="mobileCategoryAll">
+                        Semua Kategori
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" value="makanan-siap-saji" id="mobileCategorySiapSaji">
+                    <label class="form-check-label" for="mobileCategorySiapSaji">
+                        Makanan Siap Saji
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" value="bahan-makanan" id="mobileCategoryBahan">
+                    <label class="form-check-label" for="mobileCategoryBahan">
+                        Bahan Makanan
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" value="roti-kue" id="mobileCategoryRoti">
+                    <label class="form-check-label" for="mobileCategoryRoti">
+                        Roti & Kue
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" value="buah-sayur" id="mobileCategoryBuah">
+                    <label class="form-check-label" for="mobileCategoryBuah">
+                        Buah & Sayur
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" value="makanan-kaleng" id="mobileCategoryKaleng">
+                    <label class="form-check-label" for="mobileCategoryKaleng">
+                        Makanan Kaleng
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" value="minuman" id="mobileCategoryMinuman">
+                    <label class="form-check-label" for="mobileCategoryMinuman">
+                        Minuman
+                    </label>
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Jarak (km)</label>
+                <div class="range-inputs">
+                    <input type="number" class="form-control" id="mobileDistanceMin" placeholder="Min" min="0" max="100">
+                    <span class="range-dash">-</span>
+                    <input type="number" class="form-control" id="mobileDistanceMax" placeholder="Max" min="0" max="100">
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Status</label>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="mobileStatus" id="mobileStatusAll" value="all" checked>
+                    <label class="form-check-label" for="mobileStatusAll">
+                        Semua
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="mobileStatus" id="mobileStatusAvailable" value="available">
+                    <label class="form-check-label" for="mobileStatusAvailable">
+                        Tersedia
+                    </label>
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Waktu Pengambilan</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="mobilePickupDate" placeholder="Pilih tanggal">
+                    <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Kuantitas Minimum</label>
+                <input type="number" class="form-control" id="mobileQuantityMin" placeholder="Jumlah minimum" min="1">
+            </div>
+        </form>
+    </div>
+    <div class="mobile-filters-actions">
+        <button type="button" class="btn btn-outline-secondary w-50" id="resetMobileFilters">
+            <i class="fas fa-redo-alt me-2"></i>Reset
+        </button>
+        <button type="button" class="btn btn-primary w-50" id="applyMobileFilters">
+            <i class="fas fa-filter me-2"></i>Terapkan
+        </button>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+<script src="{{ asset('assets/js/jquery-3.5.1.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Initialize date picker
+        flatpickr("#pickupDate, #mobilePickupDate", {
+            enableTime: false,
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            allowInput: true
+        });
+        
+        // Initialize Map
+        let map = L.map('donationMap').setView([-6.200000, 106.816666], 13); // Jakarta coordinates
+        let isFullMap = false;
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Custom icon for food donation markers
+        const foodIcon = L.icon({
+            iconUrl: '{{ asset('assets/images/food-marker.png') }}',
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        });
+        
+        // Add sample markers
+        addMarker(-6.1754, 106.8272, 'Nasi Kotak Sisa Event', '25 Porsi', 'PT Seminar Indonesia', 'Kedaluwarsa: 8 Jam', '1.2 km', '{{ asset('assets/images/food1.jpg') }}', foodIcon);
+        addMarker(-6.2088, 106.8456, 'Aneka Roti dan Kue', '15 Item', 'Bakery Delicious', 'Kedaluwarsa: 2 Hari', '2.5 km', '{{ asset('assets/images/food2.jpg') }}', foodIcon);
+        addMarker(-6.1899, 106.8219, 'Sayuran Organik Segar', '8 Kg', 'Kebun Sayur Bahagia', 'Kedaluwarsa: 3 Hari', '3.8 km', '{{ asset('assets/images/food3.jpg') }}', foodIcon);
+        addMarker(-6.1744, 106.7900, 'Buah-buahan Segar', '12 Kg', 'Toko Buah Sehat', 'Kedaluwarsa: 4 Hari', '5.1 km', '{{ asset('assets/images/food4.jpg') }}', foodIcon);
+        addMarker(-6.2156, 106.8063, 'Menu Catering Sisa', '18 Porsi', 'Catering Lezat', 'Kedaluwarsa: 10 Jam', '4.3 km', '{{ asset('assets/images/food5.jpg') }}', foodIcon);
+        addMarker(-6.2300, 106.8400, 'Makanan Kaleng Berlebih', '24 Kaleng', 'Minimarket 24 Jam', 'Kedaluwarsa: 6 Bulan', '6.7 km', '{{ asset('assets/images/food6.jpg') }}', foodIcon);
+        
+        function addMarker(lat, lng, title, quantity, donor, expiry, distance, image, icon) {
+            const marker = L.marker([lat, lng], {icon: icon}).addTo(map);
+            
+            const popupContent = `
+                <div class="map-popup">
+                    <div class="map-popup-image">
+                        <img src="${image}" alt="${title}">
+                    </div>
+                    <div class="map-popup-content">
+                        <h5 class="map-popup-title">${title}</h5>
+                        <div class="map-popup-meta">
+                            <span><i class="fas fa-box"></i> ${quantity}</span>
+                            <span><i class="fas fa-calendar"></i> ${expiry}</span>
+                        </div>
+                        <div class="map-popup-footer">
+                            <div class="map-popup-distance">
+                                <i class="fas fa-map-marker-alt"></i> ${distance}
+                            </div>
+                            <a href="#" class="map-popup-action">Detail</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const customPopup = L.popup({
+                className: 'custom-marker-popup',
+                closeButton: true,
+                autoClose: true,
+                closeOnEscapeKey: true,
+                closeOnClick: true
+            }).setContent(popupContent);
+            
+            marker.bindPopup(customPopup);
+        }
+        
+        // Center map on user's location
+        $('#centerMap').click(function() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+                    map.setView([userLat, userLng], 13);
+                    
+                    // Optional: Add a marker for user's location
+                    const userIcon = L.icon({
+                        iconUrl: '{{ asset('assets/images/user-marker.png') }}',
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 32]
+                    });
+                    
+                    L.marker([userLat, userLng], {icon: userIcon}).addTo(map)
+                        .bindPopup("Lokasi Anda").openPopup();
+                    
+                }, function(error) {
+                    // Handle errors
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            alert("Izin lokasi ditolak. Silakan aktifkan akses lokasi di browser Anda.");
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            alert("Informasi lokasi tidak tersedia.");
+                            break;
+                        case error.TIMEOUT:
+                            alert("Permintaan untuk mendapatkan lokasi pengguna habis waktu.");
+                            break;
+                        case error.UNKNOWN_ERROR:
+                            alert("Terjadi kesalahan yang tidak diketahui.");
+                            break;
+                    }
+                });
+            } else {
+                alert("Geolocation tidak didukung oleh browser Anda.");
+            }
+        });
+        
+        // Toggle full map view
+        $('#toggleFullMap').click(function() {
+            const mapContainer = $('.search-map-container');
+            const mapElement = $('#donationMap');
+            
+            if (isFullMap) {
+                // Return to normal size
+                mapContainer.css({
+                    'position': 'relative',
+                    'z-index': '1',
+                    'width': '100%',
+                    'height': 'auto'
+                });
+                mapElement.css('height', '400px');
+                $(this).html('<i class="fas fa-expand"></i>');
+                isFullMap = false;
+            } else {
+                // Expand to full size
+                mapContainer.css({
+                    'position': 'fixed',
+                    'top': '0',
+                    'left': '0',
+                    'right': '0',
+                    'bottom': '0',
+                    'z-index': '1000',
+                    'width': '100%',
+                    'height': '100vh',
+                    'margin': '0',
+                    'border-radius': '0'
+                });
+                mapElement.css('height', 'calc(100vh - 70px)');
+                $(this).html('<i class="fas fa-compress"></i>');
+                isFullMap = true;
+            }
+            
+            // Make sure the map renders correctly after resize
+            setTimeout(function() {
+                map.invalidateSize();
+            }, 100);
+        });
+        
+        // Mobile filters toggle
+        $('#showMobileFilters').click(function() {
+            $('#mobileFiltersPanel').css('display', 'block');
+        });
+        
+        $('#closeMobileFilters').click(function() {
+            $('#mobileFiltersPanel').css('display', 'none');
+        });
+        
+        // Apply filters
+        $('#applyFilters, #applyMobileFilters').click(function(e) {
+            e.preventDefault();
+            // In a real app, this would trigger an AJAX request to filter the results
+            alert('Filter berhasil diterapkan!');
+            
+            if ($(this).attr('id') === 'applyMobileFilters') {
+                $('#mobileFiltersPanel').css('display', 'none');
+            }
+        });
+        
+        // Reset filters
+        $('#resetFilters, #resetMobileFilters').click(function(e) {
+            e.preventDefault();
+            
+            // Reset desktop form
+            if ($(this).attr('id') === 'resetFilters') {
+                $('#filterForm')[0].reset();
+                $('#categoryAll').prop('checked', true);
+                $('#statusAll').prop('checked', true);
+            } else {
+                // Reset mobile form
+                $('#mobileFilterForm')[0].reset();
+                $('#mobileCategoryAll').prop('checked', true);
+                $('#mobileStatusAll').prop('checked', true);
+                
+                // Close mobile panel after reset
+                $('#mobileFiltersPanel').css('display', 'none');
+            }
+            
+            // Alert for demonstration purposes
+            alert('Filter berhasil direset!');
+        });
+        
+        // Syncronize category checkboxes
+        $('#categoryAll, #mobileCategoryAll').change(function() {
+            const isChecked = $(this).prop('checked');
+            const form = $(this).closest('form');
+            
+            // Disable other category checkboxes if "All" is checked
+            form.find('input[type="checkbox"]').not(this).prop('disabled', isChecked);
+        });
+        
+        // Search button
+        $('#searchBtn').click(function() {
+            const keyword = $('#searchKeyword').val();
+            if (keyword) {
+                // In a real app, this would trigger an AJAX request to search
+                alert('Mencari: ' + keyword);
+            }
+        });
+        
+        // Allow pressing Enter in search box
+        $('#searchKeyword').keypress(function(e) {
+            if (e.which === 13) { // Enter key
+                $('#searchBtn').click();
+                return false;
+            }
+        });
+        
+        // Initialize with "All" category selected
+        $('#categoryAll, #mobileCategoryAll').change();
+    });
+</script>
+@endpush
