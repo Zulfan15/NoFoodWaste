@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
-
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\ResetPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,12 +20,13 @@ use App\Http\Controllers\DonationController;
 
 @include_once('admin_web.php');
 
+// Route untuk homepage (accessible to all)
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
+
 // Route untuk guest (belum login)
 Route::middleware('guest')->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('login');
-    });
-
     Route::get('login', function() {
         return view('login');
     })->name('login');
@@ -37,6 +39,12 @@ Route::middleware('guest')->group(function () {
     })->name('register');
     
     Route::post('register', [AuthController::class, 'register'])->name('register.post');
+    
+    // Password reset routes
+    Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 });
 
 // Route untuk user yang sudah login

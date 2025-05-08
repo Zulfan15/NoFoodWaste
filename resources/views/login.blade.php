@@ -662,7 +662,7 @@
                             <input class="form-check-input" type="checkbox" name="remember" id="remember">
                             <label class="form-check-label" for="remember">Ingat saya</label>
                         </div>
-                        <a href="#" class="forgot-password">Lupa password?</a>
+                        <a href="{{ route('password.request') }}" class="forgot-password">Lupa password?</a>
                     </div>
                     
                     <button type="submit" class="login-btn" id="login-button">
@@ -706,8 +706,6 @@
         </div>
     </div>
 
-   
-
     <!-- jQuery -->
     <script src="{{ asset('assets/js/jquery-3.5.1.min.js') }}"></script>
     
@@ -742,12 +740,6 @@
             const button = document.getElementById('login-button');
             button.innerHTML = '<span class="spinner"></span>Memproses...';
             button.disabled = true;
-        });
-        
-        // Show help modal when needed
-        document.querySelector('.forgot-password').addEventListener('click', function(e) {
-            e.preventDefault();
-            new bootstrap.Modal(document.getElementById('helpModal')).show();
         });
     </script>
 </body>
