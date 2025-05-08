@@ -263,7 +263,7 @@
         <div class="container navbar-container">
             <a href="{{ route('home') }}" class="navbar-brand">
                 <img src="{{ asset('assets/images/logo.png') }}" alt="NoFoodWaste Logo">
-                <span>NO FOOD WASTED</span>
+                <span>NO FOOD WASTE</span>
             </a>
             <button class="navbar-toggle" id="navbarToggle">
                 <i class="fas fa-bars"></i>
