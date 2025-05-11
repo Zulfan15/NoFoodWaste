@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResetPasswordController;
 
 /*
@@ -18,7 +19,7 @@ use App\Http\Controllers\ResetPasswordController;
 |
 */
 
-@include_once('admin_web.php');
+// Welcome page
 
 // Route untuk homepage (accessible to all)
 Route::get('/', function () {
@@ -49,18 +50,79 @@ Route::middleware('guest')->group(function () {
 
 // Route untuk user yang sudah login
 Route::middleware('auth')->group(function () {
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-    
-    // Dashboard route
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');      // Dashboard route
     Route::get('/dashboard', function() {
         return view('dashboard.index');
-    })->name('dashboard');
-
-    // Donation routes
+    })->name('dashboard');    // Donation routes
     Route::get('/donate', [DonationController::class, 'index'])->name('donate');
+    Route::post('/donate', [DonationController::class, 'store'])->name('donate.post');
     Route::get('/find-donations', [DonationController::class, 'findDonations'])->name('find-donations');
+    
+    // Extended donation functionality
+    Route::get('/donations/{id}', [DonationController::class, 'show'])->name('donations.show');
+    Route::get('/donations/{id}/edit', [DonationController::class, 'edit'])->name('donations.edit');
+    Route::put('/donations/{id}', [DonationController::class, 'update'])->name('donations.update');
+    Route::delete('/donations/{id}', [DonationController::class, 'destroy'])->name('donations.destroy');
+    
+    // Claims functionality
+    Route::post('/donations/{id}/claim', [DonationController::class, 'claim'])->name('donations.claim');
+    Route::get('/claims/{id}', [DonationController::class, 'showClaim'])->name('claims.show');
+    Route::delete('/claims/{id}', [DonationController::class, 'cancelClaim'])->name('claims.cancel');// User profile routes
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+    Route::post('/profile/update-photo', [ProfileController::class, 'updateProfilePhoto'])->name('profile.update-photo');
+    
+    // User activity routes
+    Route::get('/my-activity', [ProfileController::class, 'activity'])->name('my-activity');
+    Route::get('/my-donations', [DonationController::class, 'myDonations'])->name('donations.my');
+    Route::get('/my-claims', [DonationController::class, 'myClaims'])->name('claims.my');
+    
+    // User settings routes
+    Route::get('/settings', [ProfileController::class, 'showSettings'])->name('settings');
+    Route::post('/settings/update', [ProfileController::class, 'updateSettings'])->name('settings.update');
+    Route::post('/profile/deactivate', [ProfileController::class, 'deactivate'])->name('profile.deactivate');
+    Route::delete('/profile/delete', [ProfileController::class, 'deleteAccount'])->name('profile.delete');
 });
 
-Route::prefix('starter-kit')->group(function () {
-    Route::view('index', 'admin.color-version.index')->name('index');
-});
+// Route fallback untuk template (redirect ke dashboard)
+Route::get('/index', function() {
+    return redirect()->route('dashboard');
+})->name('index');
+
+// Route fallback untuk template starter-kit yang dihapus
+Route::get('/footer-dark', function() {
+    return redirect()->route('dashboard');
+})->name('footer-dark');
+
+Route::get('/footer-light', function() {
+    return redirect()->route('dashboard');
+})->name('footer-light');
+
+Route::get('/footer-fixed', function() {
+    return redirect()->route('dashboard');
+})->name('footer-fixed');
+
+Route::get('/layout-dark', function() {
+    return redirect()->route('dashboard');
+})->name('layout-dark');
+
+Route::get('/layout-rtl', function() {
+    return redirect()->route('dashboard');
+})->name('layout-rtl');
+
+Route::get('/boxed', function() {
+    return redirect()->route('dashboard');
+})->name('boxed');
+
+Route::get('/default-layout', function() {
+    return redirect()->route('dashboard');
+})->name('default-layout');
+
+Route::get('/compact-layout', function() {
+    return redirect()->route('dashboard');
+})->name('compact-layout');
+
+Route::get('/modern-layout', function() {
+    return redirect()->route('dashboard');
+})->name('modern-layout');

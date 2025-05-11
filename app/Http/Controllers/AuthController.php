@@ -31,12 +31,29 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'penerima',  // Default role from your table
-        ]);
-
-        // Login otomatis setelah registrasi
+        ]);        // Login otomatis setelah registrasi
         Auth::login($user);
 
-        return response()->json(['message' => 'Successfully registered and logged in!', 'user' => $user], 201);
+        // Redirect berdasarkan role
+        return $this->redirectBasedOnRole($user);
+    }
+
+    // Helper method untuk redirect berdasarkan role
+    private function redirectBasedOnRole($user)
+    {
+        switch ($user->role) {
+            case 'admin':
+                return redirect()->route('admin.dashboard');
+            case 'restaurant':
+                return redirect()->route('restaurant.dashboard');
+            case 'ngo':
+                return redirect()->route('ngo.dashboard');
+            case 'user':
+            case 'penerima':
+                return redirect()->route('user.dashboard');
+            default:
+                return redirect()->route('home');
+        }
     }
 
     // Method untuk login
@@ -64,12 +81,13 @@ class AuthController extends Controller
         // Tambahkan debug untuk password verification
         $password_check = Hash::check($request->password, $user->password);
         \Log::info('Password check', ['result' => $password_check ? 'match' : 'no match']);
-        
-        // Coba login - ensure fields match your database
+          // Coba login - ensure fields match your database
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $request->session()->regenerate();
             \Log::info('Login berhasil', ['user_id' => Auth::id(), 'email' => $request->email]);
-            return redirect()->intended('/dashboard');
+            
+            // Redirect berdasarkan role
+            return $this->redirectBasedOnRole(Auth::user());
         }
     
         \Log::warning('Login gagal', ['email' => $request->email]);

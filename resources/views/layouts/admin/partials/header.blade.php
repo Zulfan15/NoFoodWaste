@@ -17,8 +17,7 @@
         <li><a class="text-white" href="#!" onclick="javascript:toggleFullScreen()" style="color: #FAF3E0; font-size: 20px;"><i data-feather="maximize" style="color: #FAF3E0;"></i></a></li> 
         <li>
           <div class="mode"><i class="fa fa-moon-o" style="color: #FAF3E0;"></i></div> 
-        </li>
-        <li class="onhover-dropdown">
+        </li>        <li class="onhover-dropdown">
           <div class="notification-box"><i data-feather="bell" style="color: #FAF3E0;"></i><span class="dot-animated" style="background-color: #FAF3E0;"></span></div>
           <ul class="notification-dropdown onhover-show-div">
             <li>
@@ -59,6 +58,31 @@
                   <span>6 hour ago</span>
                 </div>
               </div>
+            </li>
+          </ul>
+        </li>
+        
+        <li class="onhover-dropdown p-0">
+          <div class="media profile-media">
+            @if (Auth::user()->profile_photo)
+              <img class="b-r-10" src="{{ asset('storage/profile_photos/' . Auth::user()->profile_photo) }}" alt="" width="35" height="35" style="object-fit: cover;">
+            @else
+              <img class="b-r-10" src="{{ asset('assets/images/user/avatar.jpg') }}" alt="" width="35" height="35">
+            @endif
+            <div class="media-body">
+              <span>{{ Auth::user()->username }}</span>
+              <p class="mb-0 font-roboto">{{ ucfirst(Auth::user()->role) }} <i class="middle fa fa-angle-down"></i></p>
+            </div>
+          </div>
+          <ul class="profile-dropdown onhover-show-div">
+            <li><a href="{{ route('profile') }}"><i data-feather="user"></i><span>Profil </span></a></li>
+            <li><a href="{{ route('my-activity') }}"><i data-feather="activity"></i><span>Aktivitas Saya</span></a></li>
+            <li><a href="{{ route('settings') }}"><i data-feather="settings"></i><span>Pengaturan</span></a></li>
+            <li>
+              <form action="{{ route('logout') }}" method="POST" id="logout-form">
+                @csrf
+                <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();"><i data-feather="log-out"></i><span>Keluar</span></a>
+              </form>
             </li>
           </ul>
         </li>

@@ -4,11 +4,18 @@
 
 @section('content')
     <section class="donate-section">
-        <div class="donate-content">
-            <h1>Donasikan Makanan Anda</h1>
-            <p>Anda dapat membantu mengurangi pemborosan makanan dengan mendonasikan makanan kepada mereka yang membutuhkan.</p>
+        <div class="donate-content">            <h1>Donasikan Makanan Anda</h1>            <p>Anda dapat membantu mengurangi pemborosan makanan dengan mendonasikan makanan kepada mereka yang membutuhkan.</p>
 
-            <form action="{{ route('donate') }}" method="POST">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>                </div>
+            @endif
+
+            <form action="{{ url('/donate') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="food_name">Nama Makanan</label>
@@ -17,12 +24,13 @@
                 <div class="form-group">
                     <label for="quantity">Jumlah</label>
                     <input type="number" id="quantity" name="quantity" required class="form-control">
-                </div>
-                <div class="form-group">
+                </div>                <div class="form-group">
                     <label for="expiry_date">Tanggal Kadaluarsa</label>
                     <input type="date" id="expiry_date" name="expiry_date" required class="form-control">
                 </div>
-                <button type="submit" class="btn btn-primary">Donasikan</button>
+                <div class="form-group mt-3">
+                    <button type="submit" class="btn btn-primary">Donasikan</button>
+                </div>
             </form>
         </div>
     </section>

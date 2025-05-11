@@ -1,33 +1,29 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\StatisticsController;
+use App\Http\Controllers\Admin\DonationController;
+use App\Http\Controllers\Admin\NGOController;
+use App\Http\Controllers\Admin\RestaurantController;
 
-
-
-Route::prefix('admin')->group(function () {
-});
-
-// Route::prefix('color-version')->group(function () {
-// });
-
-// Route::prefix('page-layout')->group(function () {
-// });
-
-// Route::prefix('footers')->group(function () {
-	
-// });
-
-Route::prefix('starter-kit')->group(function () {
-	Route::view('layout-dark', 'admin.color-version.layout-dark')->name('layout-dark');
-	Route::view('boxed', 'admin.page-layout.boxed')->name('boxed');
-	Route::view('layout-rtl', 'admin.page-layout.layout-rtl')->name('layout-rtl');
-	Route::view('footer-light', 'admin.footers.footer-light')->name('footer-light');
-	Route::view('footer-dark', 'admin.footers.footer-dark')->name('footer-dark');
-	Route::view('footer-fixed', 'admin.footers.footer-fixed')->name('footer-fixed');
-
-	Route::view('default-layout', 'multiple.default-layout')->name('default-layout');
-	Route::view('compact-layout', 'multiple.compact-layout')->name('compact-layout');
-	Route::view('modern-layout', 'multiple.modern-layout')->name('modern-layout');
+// Admin routes
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+      // Mengelola pengguna
+    Route::resource('users', UserController::class);
+    
+    // Melihat statistik
+    Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');
+    
+    // Mengelola donasi
+    Route::resource('donations', DonationController::class);
+    
+    // Mengelola NGO
+    Route::resource('ngos', NGOController::class);
+    
+    // Mengelola restoran    Route::resource('restaurants', RestaurantController::class);
 });
 
 
