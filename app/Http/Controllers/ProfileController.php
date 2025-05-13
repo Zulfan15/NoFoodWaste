@@ -12,6 +12,14 @@ use Illuminate\Validation\Rule;
 class ProfileController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }    /**
      * Show the user profile page
      *
      * @return \Illuminate\View\View
@@ -19,7 +27,53 @@ class ProfileController extends Controller
     public function show()
     {
         $user = Auth::user();
-        return view('user.profile', compact('user'));
+        
+        // Get user's donations
+        $donations = $user->donations()->orderBy('created_at', 'desc')->get() ?? collect([]);
+        
+        // Get user's claims
+        $claims = $user->claims()->with('donation.donor')->orderBy('created_at', 'desc')->get() ?? collect([]);
+        
+        // Calculate statistics
+        $stats = [
+            'total_donations' => $donations->count(),
+            'claimed_donations' => $donations->where('status', 'claimed')->count(),
+            'available_donations' => $donations->where('status', 'available')->count(),
+            'expired_donations' => $donations->where('status', 'expired')->count(),
+            'total_claims' => $claims->count(),
+            'completed_claims' => $claims->where('status', 'completed')->count(),
+            'pending_claims' => $claims->where('status', 'pending')->count()
+        ];
+        
+        // Get recent activities (combine donations and claims)
+        $recentDonations = $donations->take(5)->map(function($donation) {
+            return [
+                'id' => $donation->donation_id,
+                'type' => 'donation',
+                'title' => $donation->name,
+                'status' => $donation->status,
+                'date' => $donation->created_at,
+                'url' => route('donations.show', $donation->donation_id)
+            ];
+        });
+        
+        $recentClaims = $claims->take(5)->map(function($claim) {
+            return [
+                'id' => $claim->claim_id,
+                'type' => 'claim',
+                'title' => $claim->donation->name ?? 'Unknown Donation',
+                'status' => $claim->status,
+                'date' => $claim->created_at,
+                'url' => route('claims.show', $claim->claim_id)
+            ];
+        });
+        
+        // Combine and sort by date
+        $recentActivities = $recentDonations->concat($recentClaims)
+            ->sortByDesc('date')
+            ->take(5);
+        
+        return view('user.profile', compact('user', 'stats', 'recentActivities'));
     }
     
     /**
@@ -27,8 +81,7 @@ class ProfileController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(Request $request)
+     */    public function update(Request $request)
     {
         $user = Auth::user();
         
@@ -37,12 +90,20 @@ class ProfileController extends Controller
             'phone_number' => ['nullable', 'string', 'max:15'],
             'address' => ['nullable', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:1000'],
+            'facebook_url' => ['nullable', 'url', 'max:255'],
+            'twitter_url' => ['nullable', 'url', 'max:255'],
+            'instagram_url' => ['nullable', 'url', 'max:255'],
+            'linkedin_url' => ['nullable', 'url', 'max:255'],
         ]);
         
         $user->username = $request->username;
         $user->phone_number = $request->phone_number;
         $user->address = $request->address;
         $user->bio = $request->bio;
+        $user->facebook_url = $request->facebook_url;
+        $user->twitter_url = $request->twitter_url;
+        $user->instagram_url = $request->instagram_url;
+        $user->linkedin_url = $request->linkedin_url;
         
         $user->save();
         
@@ -123,23 +184,27 @@ class ProfileController extends Controller
     }    /**
      * Show the user's activity page
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
     public function activity()
     {
-        $user = Auth::user();
+        // Check if user is authenticated
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu.');
+        }
         
-        // Get user's donations
-        $donations = $user->donations()->orderBy('created_at', 'desc')->get();
+        $user = Auth::user();
+          // Get user's donations
+        $donations = $user->donations()->orderBy('created_at', 'desc')->get() ?? collect([]);
         
         // Get user's claims
-        $claims = $user->claims()->with('donation.user')->orderBy('created_at', 'desc')->get();
+        $claims = $user->claims()->with('donation.donor')->orderBy('created_at', 'desc')->get() ?? collect([]);
         
         // Calculate statistics
         $stats = [
             'total_donations' => $donations->count(),
-            'claimed_donations' => $donations->where('is_claimed', true)->count(),
-            'available_donations' => $donations->where('is_claimed', false)->count(),
+            'claimed_donations' => $donations->where('status', 'claimed')->count(),
+            'available_donations' => $donations->where('status', 'available')->count(),
             'my_claims' => $claims->count(),
         ];
         

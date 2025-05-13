@@ -40,12 +40,19 @@
                             <li><a href="{{ route('claims.my') }}" class="{{ request()->routeIs('claims.my') ? 'active' : '' }}">Klaim Saya</a></li>
                         </ul>
                     </li>
-                    
-                    <!-- Menu Aktivitas -->
+                      <!-- Menu Aktivitas -->
                     <li class="dropdown">
                         <a class="nav-link menu-title {{ request()->routeIs('my-activity') ? 'active' : '' }}" href="{{ route('my-activity') }}">
                             <i data-feather="activity"></i>
                             <span>Aktivitas Saya</span>
+                        </a>
+                    </li>
+                    
+                    <!-- Menu Leaderboard -->
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{ request()->routeIs('leaderboard') ? 'active' : '' }}" href="{{ route('leaderboard') }}">
+                            <i data-feather="award"></i>
+                            <span>Leaderboard</span>
                         </a>
                     </li>
                     

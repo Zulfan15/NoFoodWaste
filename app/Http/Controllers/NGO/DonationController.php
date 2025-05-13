@@ -11,9 +11,19 @@ use Illuminate\Support\Facades\Auth;
 class DonationController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
      * Display a listing of available donations.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function availableDonations()
     {
@@ -29,7 +39,7 @@ class DonationController extends Controller
     /**
      * Display history of claimed donations.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function claimHistory()
     {
@@ -45,7 +55,7 @@ class DonationController extends Controller
      * Claim a donation.
      *
      * @param  int  $donationId
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function claim($donationId)
     {
@@ -75,7 +85,7 @@ class DonationController extends Controller
      * Show details of a claimed donation.
      *
      * @param  int  $claimId
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function showClaim($claimId)
     {
@@ -90,7 +100,7 @@ class DonationController extends Controller
      * Mark a claim as completed.
      *
      * @param  int  $claimId
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function completeClaim($claimId)
     {

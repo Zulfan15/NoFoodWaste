@@ -62,18 +62,17 @@
           </ul>
         </li>
         
-        <li class="onhover-dropdown p-0">
-          <div class="media profile-media">
-            @if (Auth::user()->profile_photo)
+        <li class="onhover-dropdown p-0">          <div class="media profile-media">
+            @if (Auth::check() && Auth::user()->profile_photo)
               <img class="b-r-10" src="{{ asset('storage/profile_photos/' . Auth::user()->profile_photo) }}" alt="" width="35" height="35" style="object-fit: cover;">
             @else
               <img class="b-r-10" src="{{ asset('assets/images/user/avatar.jpg') }}" alt="" width="35" height="35">
             @endif
             <div class="media-body">
-              <span>{{ Auth::user()->username }}</span>
-              <p class="mb-0 font-roboto">{{ ucfirst(Auth::user()->role) }} <i class="middle fa fa-angle-down"></i></p>
-            </div>
-          </div>
+              <span>{{ Auth::check() ? Auth::user()->username : 'Pengguna' }}</span>
+              <p class="mb-0 font-roboto">{{ Auth::check() ? ucfirst(Auth::user()->role) : 'Guest' }} <i class="middle fa fa-angle-down"></i></p>
+            </div>          </div>
+          @if(Auth::check())
           <ul class="profile-dropdown onhover-show-div">
             <li><a href="{{ route('profile') }}"><i data-feather="user"></i><span>Profil </span></a></li>
             <li><a href="{{ route('my-activity') }}"><i data-feather="activity"></i><span>Aktivitas Saya</span></a></li>
@@ -85,6 +84,12 @@
               </form>
             </li>
           </ul>
+          @else
+          <ul class="profile-dropdown onhover-show-div">
+            <li><a href="{{ route('login') }}"><i data-feather="log-in"></i><span>Login</span></a></li>
+            <li><a href="{{ route('register') }}"><i data-feather="user-plus"></i><span>Register</span></a></li>
+          </ul>
+          @endif
         </li>
       </ul>
     </div>

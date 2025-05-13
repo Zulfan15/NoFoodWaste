@@ -35,11 +35,20 @@ class DonationClaim extends Model
      * The attributes that should be cast.
      *
      * @var array<string, string>
-     */
-    protected $casts = [
+     */    protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
-    ];
+    ];    /**
+     * The model's boot method.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // We no longer need to set claim_time as it has been removed
+    }
 
     /**
      * Get the donation associated with this claim.

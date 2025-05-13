@@ -88,10 +88,9 @@
                                 <tr>
                                     <th>Jumlah</th>
                                     <td>{{ $claim->donation->quantity }}</td>
-                                </tr>
-                                <tr>
+                                </tr>                                <tr>
                                     <th>Donatur</th>
-                                    <td>{{ $claim->donation->user->username }}</td>
+                                    <td>{{ $claim->donation->donor->username }}</td>
                                 </tr>
                                 <tr>
                                     <th>Lokasi Pengambilan</th>
@@ -99,7 +98,7 @@
                                 </tr>
                                 <tr>
                                     <th>Tanggal Kedaluwarsa</th>
-                                    <td>{{ \Carbon\Carbon::parse($claim->donation->expiry_date)->format('d M Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($claim->donation->expiration_date)->format('d M Y') }}</td>
                                 </tr>
                             </table>
                             

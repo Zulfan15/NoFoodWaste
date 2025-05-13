@@ -10,9 +10,19 @@ use Illuminate\Support\Facades\Auth;
 class DonationController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
      * Display a listing of available donations.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function index()
     {
@@ -28,7 +38,7 @@ class DonationController extends Controller
     /**
      * Display donation history from NGOs and restaurants.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function history()
     {
@@ -44,7 +54,7 @@ class DonationController extends Controller
      * Display details of a specific donation.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function show($id)
     {

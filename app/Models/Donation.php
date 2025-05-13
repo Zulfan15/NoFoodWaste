@@ -24,18 +24,20 @@ class Donation extends Model
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
-     */
-    protected $fillable = [
+     */    protected $fillable = [
         'user_id',
         'food_name',
+        'category',
         'quantity',
+        'description',
+        'image',
         'pickup_location',
+        'latitude',
+        'longitude',
         'expiration_date',
         'status',
         // Aliases to maintain compatibility with controllers
         'title',
-        'description',
-        'image',
         'expiry_date',
     ];
 

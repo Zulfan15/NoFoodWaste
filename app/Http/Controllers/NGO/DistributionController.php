@@ -5,14 +5,25 @@ namespace App\Http\Controllers\NGO;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DonationClaim;
+use App\Models\DistributionReport;
 use Illuminate\Support\Facades\Auth;
 
 class DistributionController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
+    /**
      * Display a listing of the distribution reports.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function index()
     {
@@ -29,7 +40,7 @@ class DistributionController extends Controller
      * Show the form for creating a new distribution report.
      *
      * @param  int  $claimId
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse
      */
     public function create($claimId)
     {
@@ -50,7 +61,7 @@ class DistributionController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $claimId
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request, $claimId)
     {
@@ -97,7 +108,7 @@ class DistributionController extends Controller
      * Display the specified distribution report.
      *
      * @param  int  $reportId
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function show($reportId)
     {

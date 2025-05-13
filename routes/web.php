@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ProfileController;
@@ -25,6 +26,9 @@ use App\Http\Controllers\ResetPasswordController;
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+// Leaderboard page (accessible to all)
+Route::get('/leaderboard', [LeaderboardController::class, 'showLeaderboard'])->name('leaderboard');
 
 // Route untuk guest (belum login)
 Route::middleware('guest')->group(function () {
@@ -49,14 +53,19 @@ Route::middleware('guest')->group(function () {
 });
 
 // Route untuk user yang sudah login
-Route::middleware('auth')->group(function () {
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');      // Dashboard route
-    Route::get('/dashboard', function() {
-        return view('dashboard.index');
-    })->name('dashboard');    // Donation routes
+Route::middleware('auth')->group(function () {    Route::post('logout', [AuthController::class, 'logout'])->name('logout');      
+    
+    // Dashboard route
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    // Leaderboard routes
+    Route::get('/leaderboard/data', [LeaderboardController::class, 'getLeaderboardData'])->name('leaderboard.data');
+    Route::get('/leaderboard/update', [LeaderboardController::class, 'updateLeaderboard'])->name('leaderboard.update');    // Donation routes
     Route::get('/donate', [DonationController::class, 'index'])->name('donate');
     Route::post('/donate', [DonationController::class, 'store'])->name('donate.post');
     Route::get('/find-donations', [DonationController::class, 'findDonations'])->name('find-donations');
+    Route::get('/get-nearby-donations', [DonationController::class, 'getNearbyDonations'])->name('get-nearby-donations');
+    Route::get('/donations/search-by-category/{category}', [DonationController::class, 'findByCategory'])->name('donations.category');
     
     // Extended donation functionality
     Route::get('/donations/{id}', [DonationController::class, 'show'])->name('donations.show');
@@ -65,6 +74,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/donations/{id}', [DonationController::class, 'destroy'])->name('donations.destroy');
     
     // Claims functionality
+    Route::get('/donations/{id}/claim-form', [DonationController::class, 'claimForm'])->name('donations.claim.form');
     Route::post('/donations/{id}/claim', [DonationController::class, 'claim'])->name('donations.claim');
     Route::get('/claims/{id}', [DonationController::class, 'showClaim'])->name('claims.show');
     Route::delete('/claims/{id}', [DonationController::class, 'cancelClaim'])->name('claims.cancel');// User profile routes
@@ -126,3 +136,8 @@ Route::get('/compact-layout', function() {
 Route::get('/modern-layout', function() {
     return redirect()->route('dashboard');
 })->name('modern-layout');
+
+// Route khusus untuk download assets (hanya untuk development)
+Route::get('/download-assets', function() {
+    return view('scripts.download_assets');
+});

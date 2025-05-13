@@ -39,9 +39,9 @@
                                         <td>{{ $donation->donation_id }}</td>
                                         <td>{{ $donation->food_name }}</td>
                                         <td>{{ $donation->quantity }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($donation->expiry_date)->format('d M Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($donation->expiration_date)->format('d M Y') }}</td>
                                         <td>
-                                            @if($donation->is_claimed)
+                                            @if($donation->status == 'claimed')
                                                 <span class="badge bg-success">Diklaim</span>
                                             @else
                                                 <span class="badge bg-info">Tersedia</span>
@@ -50,7 +50,7 @@
                                         <td>{{ $donation->created_at->format('d M Y') }}</td>
                                         <td>
                                             <a href="{{ route('donations.show', $donation->donation_id) }}" class="btn btn-sm btn-info">Detail</a>
-                                            @if(!$donation->is_claimed)
+                                            @if($donation->status != 'claimed')
                                                 <a href="{{ route('donations.edit', $donation->donation_id) }}" class="btn btn-sm btn-warning">Edit</a>
                                                 <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteDonationModal{{ $donation->donation_id }}">
                                                     Hapus

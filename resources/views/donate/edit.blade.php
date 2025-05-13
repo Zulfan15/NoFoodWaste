@@ -46,7 +46,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="expiry_date" class="form-label">Tanggal Kedaluwarsa <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control @error('expiry_date') is-invalid @enderror" id="expiry_date" name="expiry_date" value="{{ old('expiry_date', \Carbon\Carbon::parse($donation->expiry_date)->format('Y-m-d')) }}" required>
+                                <input type="date" class="form-control @error('expiry_date') is-invalid @enderror" id="expiry_date" name="expiry_date" value="{{ old('expiry_date', \Carbon\Carbon::parse($donation->expiration_date)->format('Y-m-d')) }}" required>
                                 @error('expiry_date')
                                     <div class="invalid-feedback">
                                         {{ $message }}

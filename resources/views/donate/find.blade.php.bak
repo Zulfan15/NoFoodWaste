@@ -1269,8 +1269,7 @@
         $('#sortResults').change(function() {
             const sortValue = $(this).val();
             $('#sortInput').val(sortValue);
-            $('#filterForm').submit();        
-        });
+            $('#filterForm').submit();        });
         
         // Reset filters
         $('#resetFilters, #resetMobileFilters').click(function(e) {
@@ -1281,6 +1280,206 @@
         // Search button
         $('#searchBtn').click(function() {
             $('#filterForm').submit();        
+        });
+        
+        // Allow pressing Enter in search box
+        $('#searchKeyword').keypress(function(e) {
+            if (e.which === 13) { // Enter key
+                $('#searchBtn').click();
+                return false;
+            }
+        });
+        
+        // Initialize with "All" category selected
+        $('#categoryAll, #mobileCategoryAll').change();
+    });
+</script>
+@endpush
+        });
+        
+        // Add sample markers
+        addMarker(-6.1754, 106.8272, 'Nasi Kotak Sisa Event', '25 Porsi', 'PT Seminar Indonesia', 'Kedaluwarsa: 8 Jam', '1.2 km', '{{ asset('assets/images/food1.jpg') }}', foodIcon);
+        addMarker(-6.2088, 106.8456, 'Aneka Roti dan Kue', '15 Item', 'Bakery Delicious', 'Kedaluwarsa: 2 Hari', '2.5 km', '{{ asset('assets/images/food2.jpg') }}', foodIcon);
+        addMarker(-6.1899, 106.8219, 'Sayuran Organik Segar', '8 Kg', 'Kebun Sayur Bahagia', 'Kedaluwarsa: 3 Hari', '3.8 km', '{{ asset('assets/images/food3.jpg') }}', foodIcon);
+        addMarker(-6.1744, 106.7900, 'Buah-buahan Segar', '12 Kg', 'Toko Buah Sehat', 'Kedaluwarsa: 4 Hari', '5.1 km', '{{ asset('assets/images/food4.jpg') }}', foodIcon);
+        addMarker(-6.2156, 106.8063, 'Menu Catering Sisa', '18 Porsi', 'Catering Lezat', 'Kedaluwarsa: 10 Jam', '4.3 km', '{{ asset('assets/images/food5.jpg') }}', foodIcon);
+        addMarker(-6.2300, 106.8400, 'Makanan Kaleng Berlebih', '24 Kaleng', 'Minimarket 24 Jam', 'Kedaluwarsa: 6 Bulan', '6.7 km', '{{ asset('assets/images/food6.jpg') }}', foodIcon);
+        
+        function addMarker(lat, lng, title, quantity, donor, expiry, distance, image, icon) {
+            const marker = L.marker([lat, lng], {icon: icon}).addTo(map);
+            
+            const popupContent = `
+                <div class="map-popup">
+                    <div class="map-popup-image">
+                        <img src="${image}" alt="${title}">
+                    </div>
+                    <div class="map-popup-content">
+                        <h5 class="map-popup-title">${title}</h5>
+                        <div class="map-popup-meta">
+                            <span><i class="fas fa-box"></i> ${quantity}</span>
+                            <span><i class="fas fa-calendar"></i> ${expiry}</span>
+                        </div>
+                        <div class="map-popup-footer">
+                            <div class="map-popup-distance">
+                                <i class="fas fa-map-marker-alt"></i> ${distance}
+                            </div>
+                            <a href="#" class="map-popup-action">Detail</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const customPopup = L.popup({
+                className: 'custom-marker-popup',
+                closeButton: true,
+                autoClose: true,
+                closeOnEscapeKey: true,
+                closeOnClick: true
+            }).setContent(popupContent);
+            
+            marker.bindPopup(customPopup);
+        }
+        
+        // Center map on user's location
+        $('#centerMap').click(function() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+                    map.setView([userLat, userLng], 13);
+                    
+                    // Optional: Add a marker for user's location
+                    const userIcon = L.icon({
+                        iconUrl: '{{ asset('assets/images/user-marker.png') }}',
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 32]
+                    });
+                    
+                    L.marker([userLat, userLng], {icon: userIcon}).addTo(map)
+                        .bindPopup("Lokasi Anda").openPopup();
+                    
+                }, function(error) {
+                    // Handle errors
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            alert("Izin lokasi ditolak. Silakan aktifkan akses lokasi di browser Anda.");
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            alert("Informasi lokasi tidak tersedia.");
+                            break;
+                        case error.TIMEOUT:
+                            alert("Permintaan untuk mendapatkan lokasi pengguna habis waktu.");
+                            break;
+                        case error.UNKNOWN_ERROR:
+                            alert("Terjadi kesalahan yang tidak diketahui.");
+                            break;
+                    }
+                });
+            } else {
+                alert("Geolocation tidak didukung oleh browser Anda.");
+            }
+        });
+        
+        // Toggle full map view
+        $('#toggleFullMap').click(function() {
+            const mapContainer = $('.search-map-container');
+            const mapElement = $('#donationMap');
+            
+            if (isFullMap) {
+                // Return to normal size
+                mapContainer.css({
+                    'position': 'relative',
+                    'z-index': '1',
+                    'width': '100%',
+                    'height': 'auto'
+                });
+                mapElement.css('height', '400px');
+                $(this).html('<i class="fas fa-expand"></i>');
+                isFullMap = false;
+            } else {
+                // Expand to full size
+                mapContainer.css({
+                    'position': 'fixed',
+                    'top': '0',
+                    'left': '0',
+                    'right': '0',
+                    'bottom': '0',
+                    'z-index': '1000',
+                    'width': '100%',
+                    'height': '100vh',
+                    'margin': '0',
+                    'border-radius': '0'
+                });
+                mapElement.css('height', 'calc(100vh - 70px)');
+                $(this).html('<i class="fas fa-compress"></i>');
+                isFullMap = true;
+            }
+            
+            // Make sure the map renders correctly after resize
+            setTimeout(function() {
+                map.invalidateSize();
+            }, 100);
+        });
+        
+        // Mobile filters toggle
+        $('#showMobileFilters').click(function() {
+            $('#mobileFiltersPanel').css('display', 'block');
+        });
+        
+        $('#closeMobileFilters').click(function() {
+            $('#mobileFiltersPanel').css('display', 'none');
+        });
+        
+        // Apply filters
+        $('#applyFilters, #applyMobileFilters').click(function(e) {
+            e.preventDefault();
+            // In a real app, this would trigger an AJAX request to filter the results
+            alert('Filter berhasil diterapkan!');
+            
+            if ($(this).attr('id') === 'applyMobileFilters') {
+                $('#mobileFiltersPanel').css('display', 'none');
+            }
+        });
+        
+        // Reset filters
+        $('#resetFilters, #resetMobileFilters').click(function(e) {
+            e.preventDefault();
+            
+            // Reset desktop form
+            if ($(this).attr('id') === 'resetFilters') {
+                $('#filterForm')[0].reset();
+                $('#categoryAll').prop('checked', true);
+                $('#statusAll').prop('checked', true);
+            } else {
+                // Reset mobile form
+                $('#mobileFilterForm')[0].reset();
+                $('#mobileCategoryAll').prop('checked', true);
+                $('#mobileStatusAll').prop('checked', true);
+                
+                // Close mobile panel after reset
+                $('#mobileFiltersPanel').css('display', 'none');
+            }
+            
+            // Alert for demonstration purposes
+            alert('Filter berhasil direset!');
+        });
+        
+        // Syncronize category checkboxes
+        $('#categoryAll, #mobileCategoryAll').change(function() {
+            const isChecked = $(this).prop('checked');
+            const form = $(this).closest('form');
+            
+            // Disable other category checkboxes if "All" is checked
+            form.find('input[type="checkbox"]').not(this).prop('disabled', isChecked);
+        });
+        
+        // Search button
+        $('#searchBtn').click(function() {
+            const keyword = $('#searchKeyword').val();
+            if (keyword) {
+                // In a real app, this would trigger an AJAX request to search
+                alert('Mencari: ' + keyword);
+            }
         });
         
         // Allow pressing Enter in search box

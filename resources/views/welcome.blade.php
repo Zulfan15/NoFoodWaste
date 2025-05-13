@@ -362,7 +362,9 @@
                     </div>
                 </div>
                 <div class="col" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
-                    <img src="{{ asset('assets/images/food-waste-problem.jpg') }}" alt="Permasalahan Pemborosan Makanan" class="w-100 rounded-lg" style="object-fit: cover; height: 400px;">
+                    <div class="d-flex justify-content-center align-items-center h-100" style="min-height:400px;">
+                        <img src="{{ asset('assets/images/foodwaste.png') }}" alt="Permasalahan Pemborosan Makanan" class="w-100 rounded-lg" style="object-fit:contain; height:400px; background:#f5f5f5; display:block; max-width:100%; max-width:400px;">
+                    </div>
                 </div>
             </div>
         </div>
@@ -567,7 +569,7 @@
                 <div class="col" data-aos="fade-up" data-aos-delay="100">
                     <div class="testimonial-card">
                         <div class="d-flex align-items-center mb-3">
-                            <img src="{{ asset('assets/images/testimonial1.jpg') }}" alt="Testimonial" class="testimonial-avatar">
+                            <img src="{{ asset('assets/images/usericon.png') }}" alt="Testimonial" class="testimonial-avatar">
                             <div>
                                 <h4 class="mb-0">Budi Santoso</h4>
                                 <p class="text-muted mb-0">Pemilik Restoran</p>
@@ -591,7 +593,7 @@
                 <div class="col" data-aos="fade-up" data-aos-delay="200">
                     <div class="testimonial-card">
                         <div class="d-flex align-items-center mb-3">
-                            <img src="{{ asset('assets/images/testimonial2.jpg') }}" alt="Testimonial" class="testimonial-avatar">
+                            <img src="{{ asset('assets/images/usericon.png') }}" alt="Testimonial" class="testimonial-avatar">
                             <div>
                                 <h4 class="mb-0">Siti Rahma</h4>
                                 <p class="text-muted mb-0">Pengelola Panti Asuhan</p>
@@ -617,7 +619,7 @@
                 <div class="col" data-aos="fade-up" data-aos-delay="300">
                     <div class="testimonial-card">
                         <div class="d-flex align-items-center mb-3">
-                            <img src="{{ asset('assets/images/testimonial3.jpg') }}" alt="Testimonial" class="testimonial-avatar">
+                            <img src="{{ asset('assets/images/usericon.png') }}" alt="Testimonial" class="testimonial-avatar">
                             <div>
                                 <h4 class="mb-0">Anita Wijaya</h4>
                                 <p class="text-muted mb-0">Aktivis Lingkungan</p>
@@ -641,7 +643,7 @@
                 <div class="col" data-aos="fade-up" data-aos-delay="400">
                     <div class="testimonial-card">
                         <div class="d-flex align-items-center mb-3">
-                            <img src="{{ asset('assets/images/testimonial4.jpg') }}" alt="Testimonial" class="testimonial-avatar">
+                            <img src="{{ asset('assets/images/usericon.png') }}" alt="Testimonial" class="testimonial-avatar">
                             <div>
                                 <h4 class="mb-0">Rudi Hartono</h4>
                                 <p class="text-muted mb-0">Manajer Supermarket</p>
@@ -912,7 +914,7 @@
             <div class="footer-container">
                 <div class="footer-logo">
                     <img src="{{ asset('assets/images/logo.png') }}" alt="NoFoodWaste Logo">
-                    <div class="footer-logo-text">NO FOOD WASTED</div>
+                    <div class="footer-logo-text">NO FOOD WASTE</div>
                 </div>
                 
                 <div class="footer-section">
@@ -968,11 +970,7 @@
                     </div>
                     <button class="btn btn-accent btn-sm mt-2">Langganan</button>
                     
-                    <h4 class="mt-4">Unduh Aplikasi</h4>
-                    <div class="d-flex mt-2">
-                        <a href="#" class="mr-2"><img src="{{ asset('assets/images/app-store.png') }}" alt="App Store" width="120"></a>
-                        <a href="#"><img src="{{ asset('assets/images/google-play.png') }}" alt="Google Play" width="120"></a>
-                    </div>
+                    
                 </div>
                 
                 <div class="footer-bottom">

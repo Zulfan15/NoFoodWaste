@@ -9,18 +9,16 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Detail Donasi</h4>
-                    <div>
-                        @if(Auth::id() == $donation->user_id)
+                    <div>                        @if(Auth::id() == $donation->user_id)
                             <a href="{{ route('donations.my') }}" class="btn btn-secondary">Kembali ke Donasi Saya</a>
-                            @if(!$donation->is_claimed)
+                            @if($donation->status != 'claimed')
                                 <a href="{{ route('donations.edit', $donation->donation_id) }}" class="btn btn-warning">Edit</a>
                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteDonationModal">
                                     Hapus
                                 </button>
-                            @endif
-                        @else
+                            @endif                        @else
                             <a href="{{ route('find-donations') }}" class="btn btn-secondary">Kembali ke Pencarian</a>
-                            @if(!$donation->is_claimed)
+                            @if($donation->status != 'claimed')
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#claimDonationModal">
                                     Klaim Donasi
                                 </button>
@@ -61,12 +59,11 @@
                                 </tr>
                                 <tr>
                                     <th>Tanggal Kedaluwarsa</th>
-                                    <td>{{ \Carbon\Carbon::parse($donation->expiry_date)->format('d M Y') }}</td>
-                                </tr>
-                                <tr>
+                                    <td>{{ \Carbon\Carbon::parse($donation->expiration_date)->format('d M Y') }}</td>
+                                </tr>                                <tr>
                                     <th>Status</th>
                                     <td>
-                                        @if($donation->is_claimed)
+                                        @if($donation->status == 'claimed')
                                             <span class="badge bg-success">Diklaim</span>
                                         @else
                                             <span class="badge bg-info">Tersedia</span>
@@ -86,50 +83,48 @@
                         
                         <div class="col-md-6">
                             <h5 class="mb-4">Informasi Donatur</h5>
-                            <table class="table table-borderless">
-                                <tr>
+                            <table class="table table-borderless">                                <tr>
                                     <th width="30%">Nama</th>
-                                    <td>{{ $donation->user->username }}</td>
+                                    <td>{{ $donation->donor->username }}</td>
                                 </tr>
                                 <tr>
                                     <th>Email</th>
-                                    <td>{{ $donation->user->email }}</td>
+                                    <td>{{ $donation->donor->email }}</td>
                                 </tr>
                                 <tr>
                                     <th>No. Telepon</th>
-                                    <td>{{ $donation->user->phone_number ?? 'Tidak tersedia' }}</td>
+                                    <td>{{ $donation->donor->phone_number ?? 'Tidak tersedia' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Alamat</th>
-                                    <td>{{ $donation->user->address ?? 'Tidak tersedia' }}</td>
+                                    <td>{{ $donation->donor->address ?? 'Tidak tersedia' }}</td>
                                 </tr>
                             </table>
-                            
-                            @if($donation->is_claimed && isset($donation->claims) && count($donation->claims) > 0)
+                              @if($donation->status == 'claimed' && $donation->claim)
                                 <h5 class="mt-4 mb-4">Informasi Penerima</h5>
                                 <table class="table table-borderless">
                                     <tr>
                                         <th width="30%">Nama</th>
-                                        <td>{{ $donation->claims[0]->user->username }}</td>
+                                        <td>{{ $donation->claim->user->username }}</td>
                                     </tr>
                                     <tr>
                                         <th>Email</th>
-                                        <td>{{ $donation->claims[0]->user->email }}</td>
+                                        <td>{{ $donation->claim->user->email }}</td>
                                     </tr>
                                     <tr>
                                         <th>No. Telepon</th>
-                                        <td>{{ $donation->claims[0]->user->phone_number ?? 'Tidak tersedia' }}</td>
+                                        <td>{{ $donation->claim->user->phone_number ?? 'Tidak tersedia' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Status Klaim</th>
                                         <td>
-                                            @if($donation->claims[0]->status == 'pending')
+                                            @if($donation->claim->status == 'pending')
                                                 <span class="badge bg-warning">Menunggu</span>
-                                            @elseif($donation->claims[0]->status == 'approved')
+                                            @elseif($donation->claim->status == 'approved')
                                                 <span class="badge bg-success">Disetujui</span>
-                                            @elseif($donation->claims[0]->status == 'rejected')
+                                            @elseif($donation->claim->status == 'rejected')
                                                 <span class="badge bg-danger">Ditolak</span>
-                                            @elseif($donation->claims[0]->status == 'completed')
+                                            @elseif($donation->claim->status == 'completed')
                                                 <span class="badge bg-primary">Selesai</span>
                                             @endif
                                         </td>
@@ -145,7 +140,7 @@
 </div>
 
 <!-- Delete Modal -->
-@if(Auth::id() == $donation->user_id && !$donation->is_claimed)
+@if(Auth::id() == $donation->user_id && $donation->status != 'claimed')
 <div class="modal fade" id="deleteDonationModal" tabindex="-1" aria-labelledby="deleteDonationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -170,7 +165,7 @@
 @endif
 
 <!-- Claim Modal -->
-@if(Auth::id() != $donation->user_id && !$donation->is_claimed)
+@if(Auth::id() != $donation->user_id && $donation->status != 'claimed')
 <div class="modal fade" id="claimDonationModal" tabindex="-1" aria-labelledby="claimDonationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

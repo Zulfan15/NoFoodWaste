@@ -3,6 +3,7 @@
 @section('title', 'Aktivitas Saya')
 
 @section('content')
+@if(Auth::check())
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -67,13 +68,11 @@
                                         <th>Status</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach($recentDonations as $donation)
+                                <tbody>                                    @foreach($recentDonations as $donation)
                                     <tr>
-                                        <td>{{ $donation->food_name }}</td>
-                                        <td>{{ $donation->created_at->format('d M Y') }}</td>
-                                        <td>
-                                            @if($donation->is_claimed)
+                                        <td>{{ $donation->food_name ?? 'N/A' }}</td>
+                                        <td>{{ $donation->created_at->format('d M Y') }}</td>                                        <td>
+                                            @if($donation->status == 'claimed')
                                                 <span class="badge bg-success">Diklaim</span>
                                             @else
                                                 <span class="badge bg-info">Tersedia</span>
@@ -112,11 +111,10 @@
                                         <th>Tanggal Klaim</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach($recentClaims as $claim)
+                                <tbody>                                    @foreach($recentClaims as $claim)
                                     <tr>
-                                        <td>{{ $claim->donation->food_name }}</td>
-                                        <td>{{ $claim->donation->user->username }}</td>
+                                        <td>{{ $claim->donation->food_name ?? 'N/A' }}</td>
+                                        <td>{{ $claim->donation->donor->username ?? 'N/A' }}</td>
                                         <td>{{ $claim->created_at->format('d M Y') }}</td>
                                     </tr>
                                     @endforeach
@@ -132,10 +130,20 @@
                         </div>
                     @endif
                 </div>
+            </div>        </div>
+    </div>
+</div>
+@else
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning">
+                <p>Anda harus <a href="{{ route('login') }}">login</a> untuk melihat aktivitas.</p>
             </div>
         </div>
     </div>
 </div>
+@endif
 @endsection
 
 @section('scripts')

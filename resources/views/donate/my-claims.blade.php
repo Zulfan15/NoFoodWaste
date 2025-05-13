@@ -34,12 +34,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($claims as $claim)
-                                    <tr>
-                                        <td>{{ $claim->claim_id }}</td>
-                                        <td>{{ $claim->donation->food_name }}</td>
-                                        <td>{{ $claim->donation->user->username }}</td>
-                                        <td>{{ $claim->donation->quantity }}</td>
+                                    @foreach($claims as $claim)                                    <tr>                                        <td>{{ $claim->claim_id }}</td>
+                                        <td>{{ $claim->donation->food_name ?? 'N/A' }}</td>
+                                        <td>{{ $claim->donation && $claim->donation->donor ? $claim->donation->donor->username : 'Pengguna Tidak Diketahui' }}</td>
+                                        <td>{{ $claim->donation->quantity ?? 'N/A' }}</td>
                                         <td>
                                             @if($claim->status == 'pending')
                                                 <span class="badge bg-warning">Menunggu</span>
@@ -70,11 +68,9 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="cancelClaimModalLabel{{ $claim->claim_id }}">Konfirmasi Pembatalan</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>Apakah Anda yakin ingin membatalkan klaim untuk donasi <strong>{{ $claim->donation->food_name }}</strong>?</p>
+                                                        <h5 class="modal-title" id="cancelClaimModalLabel{{ $claim->claim_id }}">Konfirmasi Pembatalan</h5>                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>                                                    <div class="modal-body">
+                                                        <p>Apakah Anda yakin ingin membatalkan klaim untuk donasi <strong>{{ $claim->donation && $claim->donation->food_name ? $claim->donation->food_name : 'Tidak Diketahui' }}</strong>?</p>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>

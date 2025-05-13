@@ -18,6 +18,11 @@ class User extends Authenticatable
         'address',
         'bio',
         'profile_photo',
+        // Social media links
+        'facebook_url',
+        'twitter_url',
+        'instagram_url',
+        'linkedin_url',
         // Notification settings
         'email_notifications',
         'donation_alerts',
@@ -63,5 +68,13 @@ class User extends Authenticatable
     public function claims()
     {
         return $this->hasMany(DonationClaim::class, 'user_id', 'user_id');
+    }
+
+    /**
+     * Get leaderboard entries for this user.
+     */
+    public function leaderboardEntries()
+    {
+        return $this->hasMany(Leaderboard::class, 'user_id', 'user_id');
     }
 }

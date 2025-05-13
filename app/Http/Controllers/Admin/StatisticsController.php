@@ -12,6 +12,17 @@ use Illuminate\View\View;
 class StatisticsController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('role:admin');
+    }
+    
+    /**
      * Display a listing of statistics.
      *
      * @return \Illuminate\View\View
