@@ -11,5 +11,11 @@
 <!-- Theme js-->
 <script src="{{ asset('assets/js/script.js') }}"></script>
 <script src="{{ asset('assets/js/theme-customizer/customizer.js') }}"></script>
+<!-- Header improvements -->
+<script src="{{ asset('assets/js/notification-api.js') }}"></script>
+<script src="{{ asset('assets/js/virtual-notification-list.js') }}"></script>
+<script src="{{ asset('assets/js/realtime-notifications.js') }}"></script>
+<script src="{{ asset('assets/js/browser-compatibility.js') }}"></script>
+<script src="{{ asset('assets/js/header-improvements.js') }}"></script>
 
 @stack('scripts')

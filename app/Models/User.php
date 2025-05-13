@@ -4,7 +4,48 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * User Model
+ *
+ * @property int $user_id
+ * @property string $username
+ * @property string $email
+ * @property string $password
+ * @property string $role
+ * @property string|null $phone_number
+ * @property string|null $address
+ * @property string|null $bio
+ * @property string|null $profile_photo
+ * @property string|null $facebook_url
+ * @property string|null $twitter_url
+ * @property string|null $instagram_url
+ * @property string|null $linkedin_url
+ * @property bool $email_notifications
+ * @property bool $donation_alerts
+ * @property bool $claim_updates
+ * @property bool $news_updates
+ * @property bool $profile_visibility
+ * @property bool $location_sharing
+ * @property bool $activity_tracking
+ * @property string|null $language
+ * @property string|null $timezone
+ * @property bool $two_factor_auth
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * 
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
+ * @method void save()
+ * @method void delete()
+ * 
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Donation[] $donations
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DonationClaim[] $claims
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Leaderboard[] $leaderboardEntries
+ */
 class User extends Authenticatable
 {
     use Notifiable;
@@ -53,9 +94,10 @@ class User extends Authenticatable
         // Account settings
         'two_factor_auth' => 'boolean',
     ];
-    
-    /**
+      /**
      * Get all donations made by the user.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function donations()
     {
@@ -64,14 +106,16 @@ class User extends Authenticatable
     
     /**
      * Get all donation claims made by the user.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function claims()
     {
         return $this->hasMany(DonationClaim::class, 'user_id', 'user_id');
-    }
-
-    /**
+    }    /**
      * Get leaderboard entries for this user.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function leaderboardEntries()
     {

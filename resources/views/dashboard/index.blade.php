@@ -562,19 +562,18 @@
     </div>
     
     <div class="swiper testimonial-slider">
-        <div class="swiper-wrapper">
-            <!-- Testimonial 1 -->
+        <div class="swiper-wrapper">            <!-- Testimonial 1 -->
             <div class="swiper-slide">
                 <div class="testimonial">
                     <div class="testimonial-image">
-                        <img src="{{ asset('assets/images/usericon.png') }}" alt="Testimonial">
+                        <img src="{{ asset('assets/images/makanan.jpeg') }}" alt="Testimonial">
                     </div>
                     <div class="testimonial-content">
                         <p class="testimonial-text">
                             "Platform No Food Waste telah membantu kami menyalurkan makanan berlebih dari restoran kami kepada yang membutuhkan. Sangat mudah digunakan dan dampaknya luar biasa."
                         </p>
                         <div class="testimonial-author">
-                            <img src="{{ asset('assets/images/user1.jpg') }}" alt="Author" class="testimonial-author-avatar">
+                            <img src="{{ asset('assets/images/usericon.png') }}" alt="Author" class="testimonial-author-avatar">
                             <div class="testimonial-author-info">
                                 <h4>Budi Santoso</h4>
                                 <p>Owner, Resto Bahagia</p>
@@ -588,14 +587,14 @@
             <div class="swiper-slide">
                 <div class="testimonial">
                     <div class="testimonial-image">
-                        <img src="{{ asset('assets/images/usericon.png') }}" alt="Testimonial">
+                        <img src="{{ asset('assets/images/makanan.jpeg') }}" alt="Testimonial">
                     </div>
                     <div class="testimonial-content">
                         <p class="testimonial-text">
                             "Sebagai pengelola panti asuhan, kami sangat terbantu dengan donasi makanan melalui platform ini. Anak-anak selalu senang mendapatkan makanan bergizi yang beragam."
                         </p>
                         <div class="testimonial-author">
-                            <img src="{{ asset('assets/images/user2.jpg') }}" alt="Author" class="testimonial-author-avatar">
+                            <img src="{{ asset('assets/images/usericon.png') }}" alt="Author" class="testimonial-author-avatar">
                             <div class="testimonial-author-info">
                                 <h4>Ibu Siti</h4>
                                 <p>Pengelola, Panti Asuhan Cahaya</p>
@@ -609,14 +608,14 @@
             <div class="swiper-slide">
                 <div class="testimonial">
                     <div class="testimonial-image">
-                        <img src="{{ asset('assets/images/usericon.png') }}" alt="Testimonial">
+                        <img src="{{ asset('assets/images/makanan.jpeg') }}" alt="Testimonial">
                     </div>
                     <div class="testimonial-content">
                         <p class="testimonial-text">
                             "Setelah bergabung dengan komunitas No Food Waste, saya merasa lebih bermakna. Kini, makanan berlebih di toko kami tidak terbuang sia-sia, melainkan membantu sesama."
                         </p>
                         <div class="testimonial-author">
-                            <img src="{{ asset('assets/images/user3.jpg') }}" alt="Author" class="testimonial-author-avatar">
+                            <img src="{{ asset('assets/images/usericon.png') }}" alt="Author" class="testimonial-author-avatar">
                             <div class="testimonial-author-info">
                                 <h4>Ahmad Ridwan</h4>
                                 <p>Manajer, Supermarket Hemat</p>

@@ -14,5 +14,12 @@
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <!-- Responsive css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/responsive.css') }}">
+<!-- Custom header improvements-->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/header-improvements.css') }}">
+
+<!-- Auth user ID for real-time notifications -->
+@auth
+<meta name="user-id" content="{{ Auth::id() }}">
+@endauth
 
 @stack('css')

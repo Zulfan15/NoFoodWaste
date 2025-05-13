@@ -5,6 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * DonationClaim Model
+ *
+ * @property int $claim_id
+ * @property int $donation_id
+ * @property int $user_id
+ * @property string $status
+ * @property string|null $notes
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * @property-read \App\Models\Donation $donation
+ * @property-read \App\Models\User $user
+ */
 class DonationClaim extends Model
 {
     /**

@@ -1046,7 +1046,7 @@ a {
 
 .leaderboard-role {
   font-size: var(--dashboard-font-size-xs);
-  color: var(--dashboard-gray-600);
+  color: var (--dashboard-gray-600);
 }
 
 .leaderboard-score {
@@ -1075,12 +1075,15 @@ a {
 .testimonial-image {
   width: 40%;
   position: relative;
+  height: 220px;  /* Altura fija para mantener consistencia */
+  overflow: hidden;
 }
 
 .testimonial-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
 }
 
 .testimonial-image::after {
@@ -1227,7 +1230,7 @@ a {
   }
   
   .testimonial-image {
-    height: 200px;
+    height: 180px;  /* Altura reducida en móviles */
   }
 }
 

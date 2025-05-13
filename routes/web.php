@@ -82,15 +82,20 @@ Route::middleware('auth')->group(function () {    Route::post('logout', [AuthCon
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
     Route::post('/profile/update-photo', [ProfileController::class, 'updateProfilePhoto'])->name('profile.update-photo');
-    
-    // User activity routes
+      // User activity routes
     Route::get('/my-activity', [ProfileController::class, 'activity'])->name('my-activity');
     Route::get('/my-donations', [DonationController::class, 'myDonations'])->name('donations.my');
     Route::get('/my-claims', [DonationController::class, 'myClaims'])->name('claims.my');
     
+    // Notifications routes
+    Route::get('/notifications', [ProfileController::class, 'notifications'])->name('notifications');
+    
     // User settings routes
     Route::get('/settings', [ProfileController::class, 'showSettings'])->name('settings');
     Route::post('/settings/update', [ProfileController::class, 'updateSettings'])->name('settings.update');
+    Route::get('/settings/export/{type}/{format}', [ProfileController::class, 'exportUserData'])->name('settings.export');
+    Route::get('/export-data', [ProfileController::class, 'exportData'])->name('profile.export-data');
+    Route::post('/data-deletion-request', [ProfileController::class, 'processDataDeletionRequest'])->name('profile.data-deletion-request');
     Route::post('/profile/deactivate', [ProfileController::class, 'deactivate'])->name('profile.deactivate');
     Route::delete('/profile/delete', [ProfileController::class, 'deleteAccount'])->name('profile.delete');
 });

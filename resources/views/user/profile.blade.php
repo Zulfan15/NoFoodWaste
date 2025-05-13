@@ -37,29 +37,80 @@
         position: relative;
         margin-top: -70px;
         padding: 0 20px 20px;
-    }
-    
-    .profile-image-container {
-        width: 140px;
-        height: 140px;
+    }      .profile-image-container {
+        width: 100px;
+        height: 100px;
         margin: 0 auto -20px;
         position: relative;
     }
-    
-    .user-info {
-        background-color: #fff;
-        border-radius: 15px;
-        padding: 30px 20px 20px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-        margin-top: 20px;
+      .profile-image-wrapper {
+        width: 90px;
+        height: 90px;
+        position: relative;
+        margin: 0 auto;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }    .profile-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        cursor: pointer;
+        border-radius: 50%;
+    }
+      .profile-overlay-text {
+        color: #fff;
+        text-align: center;
+        font-size: 12px;
     }
     
-    .user-meta {
-        padding: 15px 0;
-        border-bottom: 1px solid #f5f5f5;
+    .profile-overlay:hover {
+        opacity: 1;
+    }
+      .social-icons a {
+        display: inline-flex;
+        width: 32px;
+        height: 32px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 0 5px;
+        font-size: 18px;
+        color: #fff;
+        transition: all 0.3s ease;
     }
     
-    .user-meta-item {
+    .social-icons a.facebook {
+        background-color: #3b5998;
+    }
+    
+    .social-icons a.twitter {
+        background-color: #1da1f2;
+    }
+    
+    .social-icons a.instagram {
+        background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    }
+    
+    .social-icons a.linkedin {
+        background-color: #0077b5;
+    }
+      .user-meta-item {
         display: flex;
         align-items: center;
         margin-bottom: 10px;
@@ -107,11 +158,28 @@
         gap: 15px;
         margin: 20px 0;
     }
+      .stats-card {
+        padding: 15px 10px;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition: transform 0.3s ease;
+    }
     
-    .form-container {
-        background-color: #fff;
-        border-radius: 15px;
-        padding: 20px;
+    .stats-card:hover {
+        transform: translateY(-3px);
+    }
+    
+    .stats-number {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+    
+    .stats-title {
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
     }
     
     .btn-custom-primary {
@@ -128,8 +196,21 @@
         background-color: #1e594e;
         box-shadow: 0 5px 15px rgba(36, 105, 92, 0.2);
     }
+      .stats-card.blue {
+        background-color: rgba(0, 123, 255, 0.1);
+        color: #0d6efd;
+    }
     
-    .btn-custom-outline {
+    .stats-card.green {
+        background-color: rgba(40, 167, 69, 0.1);
+        color: #28a745;
+    }
+    
+    .stats-card.purple {
+        background-color: rgba(111, 66, 193, 0.1);
+        color: #6f42c1;
+    }
+      .btn-custom-outline {
         color: #24695c;
         border: 1px solid #24695c;
         background-color: transparent;
@@ -151,11 +232,83 @@
         .profile-body {
             margin-top: -50px;
         }
-        
-        .profile-image-container {
-            width: 120px;
-            height: 120px;
+          .profile-image-container {
+            width: 100px;
+            height: 100px;
         }
+        
+        .profile-image-wrapper {
+            width: 70px;
+            height: 70px;
+        }
+    }
+    .password-strength {
+        height: 5px;
+        margin-bottom: 10px;
+        background-color: #eee;
+        border-radius: 2px;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .password-strength.weak {
+        width: 25%;
+        background-color: #dc3545;
+    }
+    
+    .password-strength.medium {
+        width: 50%;
+        background-color: #ffc107;
+    }
+    
+    .password-strength.strong {
+        width: 75%;
+        background-color: #28a745;
+    }
+    
+    .password-strength.very-strong {
+        width: 100%;
+        background-color: #198754;
+    }
+
+    .timeline-container {
+        position: relative;
+        padding-left: 40px;
+    }
+    
+    .timeline-container:before {
+        content: '';
+        position: absolute;
+        height: 100%;
+        width: 2px;
+        left: 15px;
+        top: 0;
+        background-color: #e5e5e5;
+    }
+    
+    .timeline-item {
+        position: relative;
+        margin-bottom: 25px;
+    }
+    
+    .timeline-dot {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        left: -40px;
+        top: 0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        z-index: 2;
+    }
+    
+    .timeline-content {
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
     }
 </style>
 @endsection
@@ -183,14 +336,12 @@
             <div class="card">
                 <div class="card-body text-center">
                     <div class="profile-image-wrapper mb-3" id="profile-image-container">
-                        @if ($user->profile_photo)
-                            <img src="{{ asset('storage/profile_photos/' . $user->profile_photo) }}" alt="User Avatar" id="current-profile-photo">
+                        @if ($user->profile_photo)                            <img src="{{ asset('storage/profile_photos/' . $user->profile_photo) }}" alt="User Avatar" id="current-profile-photo" class="img-fluid rounded-circle">
                         @else
-                            <img src="{{ asset('assets/images/usericon.png') }}" alt="User Avatar" id="current-profile-photo">
-                        @endif
-                        <div class="profile-overlay" id="change-photo-trigger">
+                            <img src="{{ asset('assets/images/usericon.png') }}" alt="User Avatar" id="current-profile-photo" class="img-fluid rounded-circle">
+                        @endif                        <div class="profile-overlay" id="change-photo-trigger">
                             <div class="profile-overlay-text">
-                                <i class="fa fa-camera"></i> Ubah Foto
+                                <i class="fa fa-camera"></i> <span class="d-none d-sm-inline">Ubah</span>
                             </div>
                         </div>
                     </div>

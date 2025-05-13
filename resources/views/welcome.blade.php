@@ -419,7 +419,7 @@
             <div class="donation-slider" data-aos="fade-up" data-aos-delay="100">
                 <div class="donation-card">
                     <span class="badge-urgent">Mendesak</span>
-                    <img src="{{ asset('assets/images/donation1.jpg') }}" alt="Donasi Makanan" class="donation-img">
+                    <img src="{{ asset('assets/images/makanan.jpeg') }}" alt="Donasi Makanan" class="donation-img">
                     <div class="donation-body">
                         <h4 class="donation-title">Roti & Pastry Segar</h4>
                         <div class="donation-meta">
@@ -430,7 +430,7 @@
                     </div>
                     <div class="donation-footer">
                         <div class="donor-badge">
-                            <img src="{{ asset('assets/images/donor1.jpg') }}" alt="Donor">
+                            <img src="{{ asset('assets/images/usericon.png') }}" alt="Donor">
                             <span>Bakery Nusantara</span>
                         </div>
                         <a href="#" class="btn btn-sm btn-primary">Klaim</a>
@@ -438,7 +438,7 @@
                 </div>
                 
                 <div class="donation-card">
-                    <img src="{{ asset('assets/images/donation2.jpg') }}" alt="Donasi Makanan" class="donation-img">
+                    <img src="{{ asset('assets/images/makanan.jpeg') }}" alt="Donasi Makanan" class="donation-img">
                     <div class="donation-body">
                         <h4 class="donation-title">Sayuran Organik</h4>
                         <div class="donation-meta">
@@ -449,7 +449,7 @@
                     </div>
                     <div class="donation-footer">
                         <div class="donor-badge">
-                            <img src="{{ asset('assets/images/donor2.jpg') }}" alt="Donor">
+                            <img src="{{ asset('assets/images/usericon.png') }}" alt="Donor">
                             <span>Kebun Sehat</span>
                         </div>
                         <a href="#" class="btn btn-sm btn-primary">Klaim</a>
@@ -457,7 +457,7 @@
                 </div>
                 
                 <div class="donation-card">
-                    <img src="{{ asset('assets/images/donation3.jpg') }}" alt="Donasi Makanan" class="donation-img">
+                    <img src="{{ asset('assets/images/makanan.jpeg') }}" alt="Donasi Makanan" class="donation-img">
                     <div class="donation-body">
                         <h4 class="donation-title">Makanan Siap Saji</h4>
                         <div class="donation-meta">
@@ -468,7 +468,7 @@
                     </div>
                     <div class="donation-footer">
                         <div class="donor-badge">
-                            <img src="{{ asset('assets/images/donor3.jpg') }}" alt="Donor">
+                            <img src="{{ asset('assets/images/usericon.png') }}" alt="Donor">
                             <span>Catering Bahagia</span>
                         </div>
                         <a href="#" class="btn btn-sm btn-primary">Klaim</a>
@@ -476,7 +476,7 @@
                 </div>
                 
                 <div class="donation-card">
-                    <img src="{{ asset('assets/images/donation4.jpg') }}" alt="Donasi Makanan" class="donation-img">
+                    <img src="{{ asset('assets/images/makanan.jpeg') }}" alt="Donasi Makanan" class="donation-img">
                     <div class="donation-body">
                         <h4 class="donation-title">Buah Segar</h4>
                         <div class="donation-meta">
@@ -487,7 +487,7 @@
                     </div>
                     <div class="donation-footer">
                         <div class="donor-badge">
-                            <img src="{{ asset('assets/images/donor4.jpg') }}" alt="Donor">
+                            <img src="{{ asset('assets/images/usericon.png') }}" alt="Donor">
                             <span>Fresh Market</span>
                         </div>
                         <a href="#" class="btn btn-sm btn-primary">Klaim</a>
@@ -677,7 +677,7 @@
             
             <div class="gallery-grid">
                 <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
-                    <img src="{{ asset('assets/images/gallery1.jpg') }}" alt="Gallery Item">
+                    <img src="{{ asset('assets/images/makanan.jpeg') }}" alt="Gallery Item">
                     <div class="gallery-overlay">
                         <div class="gallery-caption">
                             <h5>Distribusi Makanan</h5>
@@ -687,7 +687,7 @@
                 </div>
                 
                 <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
-                    <img src="{{ asset('assets/images/gallery2.jpg') }}" alt="Gallery Item">
+                    <img src="{{ asset('assets/images/makanan.jpeg') }}" alt="Gallery Item">
                     <div class="gallery-overlay">
                         <div class="gallery-caption">
                             <h5>Edukasi Masyarakat</h5>
@@ -697,7 +697,7 @@
                 </div>
                 
                 <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
-                    <img src="{{ asset('assets/images/gallery3.jpg') }}" alt="Gallery Item">
+                    <img src="{{ asset('assets/images/makanan.jpeg') }}" alt="Gallery Item">
                     <div class="gallery-overlay">
                         <div class="gallery-caption">
                             <h5>Pengumpulan Donasi</h5>
@@ -707,7 +707,7 @@
                 </div>
                 
                 <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400">
-                    <img src="{{ asset('assets/images/gallery4.jpg') }}" alt="Gallery Item">
+                    <img src="{{ asset('assets/images/makanan.jpeg') }}" alt="Gallery Item">
                     <div class="gallery-overlay">
                         <div class="gallery-caption">
                             <h5>Kolaborasi Komunitas</h5>

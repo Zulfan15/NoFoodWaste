@@ -6,6 +6,28 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Donation Model
+ *
+ * @property int $donation_id
+ * @property int $user_id
+ * @property string $food_name
+ * @property string $category
+ * @property int $quantity
+ * @property string $description
+ * @property string|null $image
+ * @property string $pickup_location
+ * @property float|null $latitude
+ * @property float|null $longitude
+ * @property \Illuminate\Support\Carbon $expiration_date
+ * @property string $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * @property-read \App\Models\User $donor
+ * @property-read \App\Models\DonationClaim|null $claim
+ * @property-read string $title
+ */
 class Donation extends Model
 {
     /**
