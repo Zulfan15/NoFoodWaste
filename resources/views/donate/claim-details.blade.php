@@ -107,16 +107,16 @@
                                 <tr>
                                     <th width="30%">Donatur</th>
                                     <td>
-                                        <strong>{{ $claim->donation->user->username }}</strong><br>
-                                        Email: {{ $claim->donation->user->email }}<br>
+                                        <strong>{{ optional($claim->donation->user)->username ?? '-' }}</strong><br>
+                                        Email: {{ optional($claim->donation->user)->email ?? '-' }}<br>
                                         Telepon: {{ $claim->donation->user->phone_number ?? 'Tidak tersedia' }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>Penerima</th>
                                     <td>
-                                        <strong>{{ $claim->user->username }}</strong><br>
-                                        Email: {{ $claim->user->email }}<br>
+                                        <strong>{{ optional($claim->user)->username ?? '-' }}</strong><br>
+                                        Email: {{ optional($claim->user)->email ?? '-' }}<br>
                                         Telepon: {{ $claim->user->phone_number ?? 'Tidak tersedia' }}
                                     </td>
                                 </tr>

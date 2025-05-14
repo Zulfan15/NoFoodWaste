@@ -82,13 +82,34 @@ class DonationController extends Controller
         
         // Paginate the results
         $donations = $query->paginate(8);
-        
+
         // Get categories for filter options
         $categories = Donation::select('category')
             ->distinct()
             ->whereNotNull('category')
             ->pluck('category');
-            
+
+        // Jika request AJAX (untuk update marker peta & grid donasi tanpa reload)
+        if ($request->ajax() || $request->get('ajax') == 1) {
+            // Data marker untuk JS
+            $donationMarkers = [];
+            foreach ($donations as $donation) {
+                if ($donation->latitude && $donation->longitude) {
+                    $donationMarkers[] = [
+                        'latitude' => $donation->latitude,
+                        'longitude' => $donation->longitude,
+                        'popupContent' => view('donate._map_popup', compact('donation'))->render(),
+                    ];
+                }
+            }
+            // Render ulang grid donasi (opsional, jika ingin update grid juga)
+            $html = view('donate._donation_grid', compact('donations'))->render();
+            return response()->json([
+                'donations' => $donationMarkers,
+                'html' => $html,
+            ]);
+        }
+
         return view('donate.find', compact('donations', 'categories'));
     }
         public function store(Request $request)
@@ -149,12 +170,15 @@ class DonationController extends Controller
     {
         // Check if user is authenticated
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu untuk melihat klaim donasi Anda.');
-        }        
+            // Tetap kembalikan view dengan notifikasi error agar return type konsisten
+            return view('donate.my-claims', [
+                'claims' => collect([]),
+                'error' => 'Silakan login terlebih dahulu untuk melihat klaim donasi Anda.'
+            ]);
+        }
         // Mendapatkan user saat ini
         $user = Auth::user();
         $claims = $user->claims()->with(['donation.donor'])->orderBy('created_at', 'desc')->paginate(10);
-        
         return view('donate.my-claims', compact('claims'));
     }
       /**

@@ -26,11 +26,10 @@ class DonationController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\View\View
-     */
-    public function index(): View
+     */    public function index(): View
     {
         $donations = Donation::where('user_id', Auth::id())
-            ->with('claim.claimer')
+            ->with('claim.user')
             ->orderBy('created_at', 'desc')
             ->get();
             
@@ -86,15 +85,14 @@ class DonationController extends Controller
      *
      * @param  int  $id
      * @return \Illuminate\View\View
-     */
-    public function show($id): View
+     */    public function show($id): View
     {
         $donation = Donation::where('user_id', Auth::id())
-            ->with('claim.claimer')
+            ->with('claim.user')
             ->findOrFail($id);
             
         return view('restaurant.donations.show', compact('donation'));
-    }    /**
+    }/**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id

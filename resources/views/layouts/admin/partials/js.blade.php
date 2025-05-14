@@ -17,5 +17,6 @@
 <script src="{{ asset('assets/js/realtime-notifications.js') }}"></script>
 <script src="{{ asset('assets/js/browser-compatibility.js') }}"></script>
 <script src="{{ asset('assets/js/header-improvements.js') }}"></script>
+<script src="{{ asset('assets/js/notification-handler.js') }}"></script>
 
 @stack('scripts')

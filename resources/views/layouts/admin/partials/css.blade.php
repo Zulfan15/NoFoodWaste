@@ -16,6 +16,8 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/responsive.css') }}">
 <!-- Custom header improvements-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/header-improvements.css') }}">
+<!-- Notification styles -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/notification-styles.css') }}">
 
 <!-- Auth user ID for real-time notifications -->
 @auth

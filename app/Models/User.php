@@ -6,6 +6,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+
+
 /**
  * User Model
  *
@@ -46,6 +48,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DonationClaim[] $claims
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Leaderboard[] $leaderboardEntries
  */
+use App\Models\Donation;
+use App\Models\DonationClaim;
+use App\Models\Leaderboard;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -101,7 +107,7 @@ class User extends Authenticatable
      */
     public function donations()
     {
-        return $this->hasMany(Donation::class, 'user_id', 'user_id');
+        return $this->hasMany(\App\Models\Donation::class, 'user_id', 'user_id');
     }
     
     /**
@@ -111,14 +117,16 @@ class User extends Authenticatable
      */
     public function claims()
     {
-        return $this->hasMany(DonationClaim::class, 'user_id', 'user_id');
-    }    /**
+        return $this->hasMany(\App\Models\DonationClaim::class, 'user_id', 'user_id');
+    }
+
+    /**
      * Get leaderboard entries for this user.
      * 
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function leaderboardEntries()
     {
-        return $this->hasMany(Leaderboard::class, 'user_id', 'user_id');
+        return $this->hasMany(\App\Models\Leaderboard::class, 'user_id', 'user_id');
     }
 }

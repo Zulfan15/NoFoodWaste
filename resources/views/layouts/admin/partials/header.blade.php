@@ -2,61 +2,56 @@
     <button class="toggle-sidebar me-3" aria-label="Toggle Sidebar" aria-expanded="false">
       <i class="status_toggle middle" data-feather="menu" id="sidebar-toggle"></i>
     </button>
-    
-    <!-- Dark Mode Toggle Button -->
+      <!-- Dark Mode Toggle Button -->
     <button class="mode header-icon mx-3" aria-label="Toggle Dark Mode">
       <i data-feather="moon"></i>
     </button>
-    
-    <!-- Notification Button (moved from right to left) -->
-    <div class="onhover-dropdown">
-      <button class="notification-box header-icon mx-3" aria-label="Notifications" aria-expanded="false">
+      <!-- Notification Button -->
+    <div class="onhover-dropdown notification-dropdown-wrapper">
+      <button class="notification-box header-icon mx-3" aria-label="Notifikasi" aria-expanded="false">
         <i data-feather="bell"></i>
-        <span class="dot-animated" style="display:none;"></span>
-        <span class="notification-count sr-only">0 new notifications</span>
+        <span class="badge rounded-pill badge-primary notification-counter" style="position: absolute; top: -5px; right: -5px; font-size: 10px; display: none;">0</span>
       </button>
-      <ul class="notification-dropdown onhover-show-div" role="menu" aria-label="Notifications List">
-        <li class="notification-header">
+      <div class="notification-dropdown onhover-show-div" role="menu" aria-label="Daftar Notifikasi">
+        <div class="notification-header px-3 py-2 border-bottom">
           <div class="d-flex justify-content-between align-items-center">
-            <p class="f-w-700 mb-0">Notifications</p>
-            <span class="badge badge-primary badge-pill notification-badge">0</span>
+            <h6 class="m-0 f-w-600">Notifikasi</h6>
+            <span class="badge rounded-pill bg-primary notification-badge">0</span>
           </div>
-          <div class="notification-actions mt-2 mb-1">
-            <button class="btn btn-sm btn-outline-primary mark-all-read" aria-label="Mark all as read">
-              <i data-feather="check-circle" class="icon-xs"></i> Mark all as read
-            </button>
-            <a href="{{ route('notifications') }}" class="btn btn-sm btn-link ml-2" aria-label="View all notifications">
-              <i data-feather="external-link" class="icon-xs"></i> View all
-            </a>
-          </div>
-        </li>
-        <li class="noti-loading" style="display:none; text-align:center; padding: 15px;">
+        </div>
+          <div class="notification-actions px-3 py-2 border-bottom d-flex justify-content-between">
+          <a href="{{ route('notifications', ['mark_as_read' => 'true']) }}" class="text-primary d-flex align-items-center">
+            <i class="icon-xs me-1" data-feather="check-circle"></i> Tandai semua dibaca
+          </a>
+          <a href="{{ route('notifications') }}" class="text-primary d-flex align-items-center">
+            <span>Lihat semua</span> <i class="icon-xs ms-1" data-feather="external-link"></i>
+          </a>
+        </div>
+        
+        <div class="notification-loading text-center p-3" style="display: none;">
           <div class="spinner-border spinner-border-sm text-primary" role="status">
-            <span class="sr-only">Loading notifications...</span>
+            <span class="visually-hidden">Loading notifications...</span>
           </div>
-        </li>
-        <li class="notification-content" data-loaded="false">
+        </div>
+        
+        <div class="notification-content" data-loaded="false" style="max-height: 300px; overflow-y: auto;">
           <!-- Notification items will be loaded here dynamically -->
-          <div class="empty-state" style="display:none;">
-            <div class="text-center p-3">
-              <i data-feather="bell-off" class="mb-2"></i>
-              <p>Tidak ada notifikasi baru</p>
-            </div>
+          <div class="empty-state p-4 text-center">
+            <i data-feather="bell-off" style="height: 40px; width: 40px; color: #ccc; margin-bottom: 10px;"></i>
+            <p class="mb-0">Tidak ada notifikasi baru</p>
           </div>
-          <div class="error-state" style="display:none;">
-            <div class="text-center p-3">
-              <i data-feather="alert-circle" class="mb-2 text-danger"></i>
-              <p>Gagal memuat notifikasi</p>
-              <button class="btn btn-outline-primary btn-sm retry-load mt-2">Coba Lagi</button>
-            </div>
+          
+          <div class="error-state p-4 text-center" style="display:none;">
+            <i data-feather="alert-circle" style="height: 40px; width: 40px; color: #dc3545; margin-bottom: 10px;"></i>
+            <p class="mb-2">Gagal memuat notifikasi</p>
+            <button class="btn btn-outline-primary btn-sm retry-load">Coba Lagi</button>
           </div>
-        </li>
-        <li class="notification-footer">
-          <div class="text-center p-2">
-            <small class="text-muted">Terakhir diperbarui: <span class="last-updated">Baru saja</span></small>
-          </div>
-        </li>
-      </ul>
+        </div>
+        
+        <div class="notification-footer text-center p-2 border-top">
+          <small class="text-muted">Terakhir diperbarui: <span class="last-updated">Baru saja</span></small>
+        </div>
+      </div>
     </div>
   </div>
   

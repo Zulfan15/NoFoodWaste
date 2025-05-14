@@ -39,10 +39,9 @@ class DonationController extends Controller
      * Display donation history from NGOs and restaurants.
      *
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
-     */
-    public function history()
+     */    public function history()
     {
-        $donations = Donation::with(['donor', 'claim.claimer'])
+        $donations = Donation::with(['donor', 'claim.user'])
             ->where('status', 'claimed')
             ->orderBy('updated_at', 'desc')
             ->paginate(10);
@@ -55,10 +54,9 @@ class DonationController extends Controller
      *
      * @param  int  $id
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
-     */
-    public function show($id)
+     */    public function show($id)
     {
-        $donation = Donation::with(['donor', 'claim.claimer'])
+        $donation = Donation::with(['donor', 'claim.user'])
             ->findOrFail($id);
             
         return view('user.donations.show', compact('donation'));

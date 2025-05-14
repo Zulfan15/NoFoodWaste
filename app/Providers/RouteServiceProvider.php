@@ -59,11 +59,15 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/ngo_web.php'));
-                
-            // User routes
+                  // User routes
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/user_web.php'));
+                
+            // Notification API routes
+            Route::middleware(['web', 'auth'])
+                ->namespace($this->namespace)
+                ->group(base_path('routes/api_notifications.php'));
         });
     }
 

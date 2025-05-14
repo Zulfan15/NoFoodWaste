@@ -21,17 +21,16 @@ class DonationController extends Controller
         $this->middleware('auth');
         $this->middleware('role:admin');
     }
-    
-    /**
+      /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\View\View
      */
     public function index(): View
     {
-        $donations = Donation::with(['donor', 'claim.claimer'])->get();
+        $donations = Donation::with(['donor', 'claim.user'])->get();
         return view('admin.donations.index', compact('donations'));
-    }    /**
+    }/**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\View\View
@@ -76,7 +75,7 @@ class DonationController extends Controller
      */
     public function show($id): View
     {
-        $donation = Donation::with(['donor', 'claim.claimer'])->findOrFail($id);
+        $donation = Donation::with(['donor', 'claim.user'])->findOrFail($id);
         return view('admin.donations.show', compact('donation'));
     }
 

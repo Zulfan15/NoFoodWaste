@@ -109,14 +109,12 @@
                     <div class="row mb-3">
                         <div class="col-md-4 font-weight-bold">Claim ID:</div>
                         <div class="col-md-8">{{ $donation->claim->claim_id }}</div>
-                    </div>
-                    <div class="row mb-3">
+                    </div>                    <div class="row mb-3">
                         <div class="col-md-4 font-weight-bold">Claimed By:</div>
-                        <div class="col-md-8">{{ $donation->claim->claimer->name ?? 'N/A' }}</div>
-                    </div>
-                    <div class="row mb-3">
+                        <div class="col-md-8">{{ $donation->claim->user->name ?? 'N/A' }}</div>
+                    </div>                    <div class="row mb-3">
                         <div class="col-md-4 font-weight-bold">Claim Time:</div>
-                        <div class="col-md-8">{{ $donation->claim->claim_time->format('F j, Y, g:i a') }}</div>
+                        <div class="col-md-8">{{ $donation->claim->created_at->format('F j, Y, g:i a') }}</div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4 font-weight-bold">Status:</div>
@@ -126,7 +124,7 @@
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('admin.users.show', $donation->claim->claimer->user_id ?? 0) }}" class="btn btn-info btn-sm">
+                    <a href="{{ route('admin.users.show', $donation->claim->user->user_id ?? 0) }}" class="btn btn-info btn-sm">
                         <i class="fas fa-user fa-sm text-white-50"></i> View Claimer Profile
                     </a>
                 </div>

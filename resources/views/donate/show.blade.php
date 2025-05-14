@@ -105,11 +105,11 @@
                                 <table class="table table-borderless">
                                     <tr>
                                         <th width="30%">Nama</th>
-                                        <td>{{ $donation->claim->user->username }}</td>
+                                        <td>{{ optional($donation->claim->user)->username ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Email</th>
-                                        <td>{{ $donation->claim->user->email }}</td>
+                                        <td>{{ optional($donation->claim->user)->email ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <th>No. Telepon</th>

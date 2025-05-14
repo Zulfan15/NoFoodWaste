@@ -19,11 +19,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     
     // Mengelola donasi
     Route::resource('donations', DonationController::class);
-    
-    // Mengelola NGO
+      // Mengelola NGO
     Route::resource('ngos', NGOController::class);
     
-    // Mengelola restoran    Route::resource('restaurants', RestaurantController::class);
+    // Mengelola restoran    
+    Route::resource('restaurants', RestaurantController::class);
 });
 
 

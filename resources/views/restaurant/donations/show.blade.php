@@ -91,14 +91,13 @@
                     <div class="row mb-3">
                         <div class="col-md-4 font-weight-bold">Claim ID:</div>
                         <div class="col-md-8">{{ $donation->claim->claim_id }}</div>
-                    </div>
-                    <div class="row mb-3">
+                    </div>                    <div class="row mb-3">
                         <div class="col-md-4 font-weight-bold">Claimed By:</div>
-                        <div class="col-md-8">{{ $donation->claim->claimer->name ?? 'N/A' }}</div>
+                        <div class="col-md-8">{{ $donation->claim->user->name ?? 'N/A' }}</div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4 font-weight-bold">Claim Time:</div>
-                        <div class="col-md-8">{{ $donation->claim->claim_time->format('F j, Y, g:i a') }}</div>
+                        <div class="col-md-8">{{ $donation->claim->created_at->format('F j, Y, g:i a') }}</div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4 font-weight-bold">Status:</div>
@@ -106,15 +105,14 @@
                             <span class="badge badge-{{ $donation->claim->status == 'approved' ? 'success' : ($donation->claim->status == 'pending' ? 'warning' : ($donation->claim->status == 'completed' ? 'info' : 'danger')) }}">
                                 {{ ucfirst($donation->claim->status) }}
                             </span>
-                        </div>
-                    </div>
+                        </div>                    </div>
                     <div class="row mb-3">
                         <div class="col-md-4 font-weight-bold">Email:</div>
-                        <div class="col-md-8">{{ $donation->claim->claimer->email ?? 'N/A' }}</div>
+                        <div class="col-md-8">{{ $donation->claim->user->email ?? 'N/A' }}</div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4 font-weight-bold">Phone:</div>
-                        <div class="col-md-8">{{ $donation->claim->claimer->phone ?? 'N/A' }}</div>
+                        <div class="col-md-8">{{ $donation->claim->user->phone ?? 'N/A' }}</div>
                     </div>
                 </div>
             </div>

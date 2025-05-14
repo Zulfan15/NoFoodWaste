@@ -81,14 +81,14 @@ Route::middleware('auth')->group(function () {    Route::post('logout', [AuthCon
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
-    Route::post('/profile/update-photo', [ProfileController::class, 'updateProfilePhoto'])->name('profile.update-photo');
-      // User activity routes
+    Route::post('/profile/update-photo', [ProfileController::class, 'updateProfilePhoto'])->name('profile.update-photo');    // User activity routes
     Route::get('/my-activity', [ProfileController::class, 'activity'])->name('my-activity');
     Route::get('/my-donations', [DonationController::class, 'myDonations'])->name('donations.my');
     Route::get('/my-claims', [DonationController::class, 'myClaims'])->name('claims.my');
     
     // Notifications routes
-    Route::get('/notifications', [ProfileController::class, 'notifications'])->name('notifications');
+    Route::get('/notifications', [App\Http\Controllers\User\NotificationController::class, 'index'])->name('notifications');
+    Route::post('/notifications/mark-as-read', [App\Http\Controllers\User\NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
     
     // User settings routes
     Route::get('/settings', [ProfileController::class, 'showSettings'])->name('settings');

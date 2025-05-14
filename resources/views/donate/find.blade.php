@@ -9,601 +9,7 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-<style>
-    .page-header {
-        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-        border-radius: var(--radius-lg);
-        padding: var(--spacing-lg) var(--spacing-xl);
-        box-shadow: var(--shadow-md);
-        margin-bottom: var(--spacing-xl);
-        color: white;
-    }
-    
-    .page-header h3 {
-        font-weight: 700;
-        margin-bottom: var(--spacing-sm);
-    }
-    
-    .breadcrumb {
-        background: transparent;
-        padding: 0;
-        margin-bottom: 0;
-    }
-    
-    .breadcrumb-item a {
-        color: rgba(255, 255, 255, 0.8);
-    }
-    
-    .breadcrumb-item.active {
-        color: white;
-    }
-    
-    .search-container {
-        display: grid;
-        grid-template-columns: 320px 1fr;
-        gap: var(--spacing-xl);
-        margin-bottom: var(--spacing-2xl);
-    }
-    
-    .search-filters {
-        background: white;
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-        box-shadow: var(--shadow-md);
-        position: sticky;
-        top: 20px;
-        height: fit-content;
-    }
-    
-    .search-filters-header {
-        padding: var(--spacing-lg);
-        border-bottom: 1px solid var(--neutral-200);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .search-filters-title {
-        font-size: var(--font-size-lg);
-        font-weight: 600;
-        color: var(--neutral-800);
-        margin: 0;
-    }
-    
-    .search-filters-reset {
-        font-size: var(--font-size-sm);
-        color: var(--primary);
-        font-weight: 500;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
-    
-    .search-filters-reset i {
-        margin-right: var(--spacing-xs);
-    }
-    
-    .search-filters-reset:hover {
-        text-decoration: underline;
-    }
-    
-    .search-filters-body {
-        padding: var(--spacing-lg);
-    }
-    
-    .filter-group {
-        margin-bottom: var(--spacing-lg);
-    }
-    
-    .filter-group:last-child {
-        margin-bottom: 0;
-    }
-    
-    .filter-label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: var(--spacing-xs);
-        color: var(--neutral-800);
-    }
-    
-    .range-inputs {
-        display: flex;
-        gap: var(--spacing-sm);
-        align-items: center;
-    }
-    
-    .range-dash {
-        color: var(--neutral-500);
-    }
-    
-    .btn-filter {
-        width: 100%;
-        margin-top: var(--spacing-md);
-    }
-    
-    .search-map-container {
-        background: white;
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-        box-shadow: var(--shadow-md);
-        margin-bottom: var(--spacing-xl);
-    }
-    
-    .search-map-header {
-        padding: var(--spacing-lg);
-        border-bottom: 1px solid var(--neutral-200);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .search-map-title {
-        font-size: var(--font-size-lg);
-        font-weight: 600;
-        color: var(--neutral-800);
-        margin: 0;
-    }
-    
-    .search-map-actions {
-        display: flex;
-        gap: var(--spacing-sm);
-    }
-    
-    .search-map-action {
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: var(--radius-full);
-        background: var(--neutral-100);
-        color: var(--neutral-700);
-        cursor: pointer;
-        transition: var(--transition-fast);
-    }
-    
-    .search-map-action:hover {
-        background: var(--neutral-200);
-    }
-    
-    .search-map-body {
-        padding: 0;
-    }
-    
-    .donation-map {
-        height: 400px;
-        width: 100%;
-    }
-    
-    .donation-results {
-        margin-bottom: var(--spacing-xl);
-    }
-    
-    .donation-results-header {
-        padding: var(--spacing-lg);
-        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-        background: white;
-        box-shadow: var(--shadow-md);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: var(--spacing-sm);
-    }
-    
-    .donation-results-title {
-        font-size: var(--font-size-lg);
-        font-weight: 600;
-        color: var(--neutral-800);
-        margin: 0;
-    }
-    
-    .donation-results-count {
-        font-weight: 600;
-        color: var(--primary);
-    }
-    
-    .donation-results-sort {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-md);
-    }
-    
-    .donation-results-sort-label {
-        font-size: var(--font-size-sm);
-        color: var(--neutral-700);
-    }
-    
-    .donation-results-sort-select {
-        border: 1px solid var(--neutral-300);
-        border-radius: var(--radius-md);
-        padding: 0.25rem 0.5rem;
-        background-color: white;
-        color: var(--neutral-800);
-        font-size: var(--font-size-sm);
-    }
-    
-    .donation-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-md);
-    }
-    
-    .donation-card {
-        background: white;
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-        box-shadow: var(--shadow-md);
-        transition: var(--transition-normal);
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .donation-card:hover {
-        transform: translateY(-5px);
-        box-shadow: var(--shadow-lg);
-    }
-    
-    .donation-image {
-        height: 200px;
-        position: relative;
-    }
-    
-    .donation-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .donation-status {
-        position: absolute;
-        top: var(--spacing-sm);
-        right: var(--spacing-sm);
-        padding: 0.2rem 0.6rem;
-        font-size: var(--font-size-sm);
-        font-weight: 500;
-        border-radius: var(--radius-full);
-        background: white;
-        box-shadow: var(--shadow-sm);
-    }
-    
-    .donation-status.available {
-        background: var(--success);
-        color: white;
-    }
-    
-    .donation-status.claimed {
-        background: var(--accent);
-        color: white;
-    }
-    
-    .donation-status.expired {
-        background: var(--danger);
-        color: white;
-    }
-    
-    .donation-distance {
-        position: absolute;
-        bottom: var(--spacing-sm);
-        left: var(--spacing-sm);
-        padding: 0.2rem 0.6rem;
-        font-size: var(--font-size-sm);
-        font-weight: 500;
-        border-radius: var(--radius-full);
-        background: rgba(0, 0, 0, 0.6);
-        color: white;
-        display: flex;
-        align-items: center;
-    }
-    
-    .donation-distance i {
-        margin-right: var(--spacing-xs);
-        font-size: 0.75rem;
-    }
-    
-    .donation-body {
-        padding: var(--spacing-lg);
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .donation-title {
-        font-size: var(--font-size-lg);
-        font-weight: 600;
-        color: var(--neutral-800);
-        margin-bottom: var(--spacing-sm);
-    }
-    
-    .donation-meta {
-        display: flex;
-        gap: var(--spacing-md);
-        margin-bottom: var(--spacing-md);
-        color: var(--neutral-600);
-        font-size: var(--font-size-sm);
-    }
-    
-    .donation-meta-item {
-        display: flex;
-        align-items: center;
-    }
-    
-    .donation-meta-item i {
-        margin-right: var(--spacing-xs);
-    }
-    
-    .donation-description {
-        margin-bottom: var(--spacing-md);
-        color: var(--neutral-700);
-        flex: 1;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-    
-    .donation-footer {
-        margin-top: auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .donation-donor {
-        display: flex;
-        align-items: center;
-    }
-    
-    .donation-donor-avatar {
-        width: 32px;
-        height: 32px;
-        border-radius: var (--radius-full);
-        margin-right: var(--spacing-xs);
-    }
-    
-    .donation-donor-name {
-        font-size: var(--font-size-sm);
-        font-weight: 500;
-        color: var(--neutral-700);
-    }
-    
-    .donation-action {
-        font-size: var(--font-size-sm);
-        font-weight: 500;
-        color: white;
-        background-color: var(--primary);
-        text-decoration: none;
-        padding: 0.4rem 0.8rem;
-        border-radius: var(--radius-md);
-        transition: var(--transition-fast);
-    }
-    
-    .donation-action:hover {
-        color: white;
-        background-color: var(--primary-dark);
-    }
-    
-    .no-results {
-        background: white;
-        border-radius: var(--radius-lg);
-        padding: var(--spacing-xl);
-        text-align: center;
-        box-shadow: var(--shadow-md);
-    }
-    
-    .no-results-icon {
-        font-size: 3rem;
-        color: var(--neutral-400);
-        margin-bottom: var(--spacing-md);
-    }
-    
-    .no-results-title {
-        font-size: var(--font-size-xl);
-        font-weight: 600;
-        color: var(--neutral-800);
-        margin-bottom: var(--spacing-sm);
-    }
-    
-    .no-results-text {
-        color: var(--neutral-600);
-        margin-bottom: var(--spacing-lg);
-    }
-    
-    .pagination-container {
-        display: flex;
-        justify-content: center;
-    }
-    
-    .custom-marker-popup .leaflet-popup-content-wrapper {
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-md);
-        padding: 0;
-        overflow: hidden;
-    }
-    
-    .custom-marker-popup .leaflet-popup-content {
-        margin: 0;
-        width: 250px !important;
-    }
-    
-    .map-popup {
-        padding: 0;
-    }
-    
-    .map-popup-image {
-        height: 120px;
-        width: 100%;
-    }
-    
-    .map-popup-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .map-popup-content {
-        padding: var(--spacing-md);
-    }
-    
-    .map-popup-title {
-        font-weight: 600;
-        font-size: var(--font-size-base);
-        margin-bottom: var(--spacing-xs);
-        color: var(--neutral-800);
-    }
-    
-    .map-popup-meta {
-        font-size: var(--font-size-sm);
-        color: var(--neutral-600);
-        margin-bottom: var(--spacing-xs);
-    }
-    
-    .map-popup-meta span {
-        display: inline-flex;
-        align-items: center;
-        margin-right: var(--spacing-sm);
-    }
-    
-    .map-popup-meta i {
-        margin-right: 3px;
-        font-size: 0.75rem;
-    }
-    
-    .map-popup-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .map-popup-distance {
-        font-size: var(--font-size-sm);
-        font-weight: 500;
-        color: var(--primary);
-    }
-    
-    .map-popup-action {
-        font-size: var(--font-size-sm);
-        color: var(--primary);
-        text-decoration: none;
-        font-weight: 500;
-    }
-    
-    .map-popup-action:hover {
-        text-decoration: underline;
-    }
-    
-    /* Mobile Filters */
-    .mobile-filters-toggle {
-        position: fixed;
-        bottom: var(--spacing-lg);
-        right: var(--spacing-lg);
-        width: 56px;
-        height: 56px;
-        border-radius: var(--radius-full);
-        background: var(--primary);
-        color: white;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        box-shadow: var(--shadow-lg);
-        z-index: 100;
-        cursor: pointer;
-    }
-    
-    .mobile-filters {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: white;
-        z-index: 1000;
-        display: none;
-        overflow-y: auto;
-    }
-    
-    .mobile-filters-header {
-        padding: var(--spacing-lg);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid var(--neutral-200);
-        position: sticky;
-        top: 0;
-        background: white;
-        z-index: 10;
-    }
-    
-    .mobile-filters-title {
-        font-size: var(--font-size-lg);
-        font-weight: 600;
-        color: var(--neutral-800);
-        margin: 0;
-    }
-    
-    .mobile-filters-close {
-        width: 36px;
-        height: 36px;
-        border-radius: var(--radius-full);
-        background: var(--neutral-100);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--neutral-800);
-        cursor: pointer;
-    }
-    
-    .mobile-filters-body {
-        padding: var(--spacing-lg);
-    }
-    
-    .mobile-filters-actions {
-        padding: var(--spacing-lg);
-        display: flex;
-        gap: var(--spacing-md);
-        border-top: 1px solid var(--neutral-200);
-        position: sticky;
-        bottom: 0;
-        background: white;
-        z-index: 10;
-    }
-    
-    /* Responsive adjustments */
-    @media (max-width: 992px) {
-        .search-container {
-            grid-template-columns: 1fr;
-        }
-        
-        .search-filters {
-            display: none;
-        }
-        
-        .mobile-filters-toggle {
-            display: flex;
-        }
-        
-        .donation-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .donation-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .donation-results-header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: var(--spacing-md);
-        }
-        
-        .donation-results-sort {
-            width: 100%;
-            justify-content: space-between;
-        }
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('assets/css/find-donations.css') }}">
 @endpush
 
 @section('content')
@@ -624,8 +30,8 @@
                     <form action="{{ route('find-donations') }}" method="GET" class="w-100 d-flex justify-content-end">
                         <div class="input-group" style="max-width: 400px;">
                             <input type="text" class="form-control" id="searchKeyword" name="search" placeholder="Cari donasi makanan..." value="{{ request('search') }}">
-                            <button class="btn btn-light" type="submit" id="searchBtn">
-                                <i class="fas fa-search"></i>
+                            <button class="btn btn-light" type="submit" id="searchBtn" aria-label="Cari Donasi">
+                                <i class="fas fa-search" aria-hidden="true"></i>
                             </button>
                         </div>
                     </form>
@@ -747,11 +153,11 @@
                 <div class="search-map-header">
                     <h4 class="search-map-title">Peta Donasi</h4>
                     <div class="search-map-actions">
-                        <div class="search-map-action" id="centerMap" title="Pusatkan Peta">
-                            <i class="fas fa-crosshairs"></i>
+                        <div class="search-map-action" id="centerMap" role="button" tabindex="0" aria-label="Pusatkan Peta" title="Pusatkan Peta">
+                            <i class="fas fa-crosshairs" aria-hidden="true"></i>
                         </div>
-                        <div class="search-map-action" id="toggleFullMap" title="Perbesar Peta">
-                            <i class="fas fa-expand"></i>
+                        <div class="search-map-action" id="toggleFullMap" role="button" tabindex="0" aria-label="Perbesar Peta" title="Perbesar Peta">
+                            <i class="fas fa-expand" aria-hidden="true"></i>
                         </div>
                     </div>
                 </div>
@@ -833,7 +239,30 @@
                 </div>
                 
                 <div class="pagination-container mt-4">
-                    {{ $donations->appends(request()->except('page'))->links() }}
+                    @if ($donations->hasPages())
+                        <nav aria-label="Navigasi halaman donasi">
+                            <ul class="pagination justify-content-center mb-0">
+                                {{-- Tombol Previous --}}
+                                <li class="page-item{{ $donations->onFirstPage() ? ' disabled' : '' }}">
+                                    <a class="page-link" href="{{ $donations->previousPageUrl() ?? '#' }}" tabindex="{{ $donations->onFirstPage() ? '-1' : '0' }}" aria-disabled="{{ $donations->onFirstPage() ? 'true' : 'false' }}" aria-label="Sebelumnya">
+                                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                {{-- Nomor Halaman --}}
+                                @foreach ($donations->getUrlRange(1, $donations->lastPage()) as $page => $url)
+                                    <li class="page-item{{ $page == $donations->currentPage() ? ' active' : '' }}">
+                                        <a class="page-link" href="{{ $url }}" aria-current="{{ $page == $donations->currentPage() ? 'page' : false }}">{{ $page }}</a>
+                                    </li>
+                                @endforeach
+                                {{-- Tombol Next --}}
+                                <li class="page-item{{ $donations->hasMorePages() ? '' : ' disabled' }}">
+                                    <a class="page-link" href="{{ $donations->nextPageUrl() ?? '#' }}" tabindex="{{ $donations->hasMorePages() ? '0' : '-1' }}" aria-disabled="{{ $donations->hasMorePages() ? 'false' : 'true' }}" aria-label="Berikutnya">
+                                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    @endif
                 </div>
                 @else
                 <div class="no-results">
@@ -847,203 +276,102 @@
                 @endif
             </div>
                     
-                    <!-- Donation Card 5 -->
-                    <div class="donation-card">
-                        <div class="donation-image">
-                            <img src="{{ asset('assets/images/food5.jpg') }}" alt="Menu Catering Sisa">
-                            <div class="donation-status available">Tersedia</div>
-                            <div class="donation-distance">
-                                <i class="fas fa-map-marker-alt"></i> 4.3 km
-                            </div>
-                        </div>
-                        <div class="donation-body">
-                            <h4 class="donation-title">Menu Catering Sisa</h4>
-                            <div class="donation-meta">
-                                <div class="donation-meta-item">
-                                    <i class="fas fa-calendar"></i> Kedaluwarsa: 10 Jam
-                                </div>
-                                <div class="donation-meta-item">
-                                    <i class="fas fa-box"></i> 18 Porsi
-                                </div>
-                            </div>
-                            <p class="donation-description">
-                                Menu catering lengkap yang tersisa dari acara kantor. Menu termasuk nasi, ayam, sayur, dan lauk pendamping. Makanan masih dalam keadaan hangat dan baru saja selesai disajikan.
-                            </p>
-                            <div class="donation-footer">
-                                <div class="donation-donor">
-                                    <img src="{{ asset('assets/images/user5.jpg') }}" alt="Donor" class="donation-donor-avatar">
-                                    <span class="donation-donor-name">Catering Lezat</span>
-                                </div>
-                                <a href="#" class="donation-action">Ambil</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Donation Card 6 -->
-                    <div class="donation-card">
-                        <div class="donation-image">
-                            <img src="{{ asset('assets/images/food6.jpg') }}" alt="Makanan Kaleng">
-                            <div class="donation-status available">Tersedia</div>
-                            <div class="donation-distance">
-                                <i class="fas fa-map-marker-alt"></i> 6.7 km
-                            </div>
-                        </div>
-                        <div class="donation-body">
-                            <h4 class="donation-title">Makanan Kaleng Berlebih</h4>
-                            <div class="donation-meta">
-                                <div class="donation-meta-item">
-                                    <i class="fas fa-calendar"></i> Kedaluwarsa: 6 Bulan
-                                </div>
-                                <div class="donation-meta-item">
-                                    <i class="fas fa-box"></i> 24 Kaleng
-                                </div>
-                            </div>
-                            <p class="donation-description">
-                                Berbagai makanan kaleng yang masih jauh dari tanggal kedaluwarsa. Termasuk sarden, kornet, dan beberapa sayuran kaleng. Semua kemasan masih utuh dan belum dibuka.
-                            </p>
-                            <div class="donation-footer">
-                                <div class="donation-donor">
-                                    <img src="{{ asset('assets/images/user6.jpg') }}" alt="Donor" class="donation-donor-avatar">
-                                    <span class="donation-donor-name">Minimarket 24 Jam</span>
-                                </div>
-                                <a href="#" class="donation-action">Ambil</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Pagination -->
-                <div class="pagination-container mt-4">
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                    <i class="fas fa-chevron-left"></i>
-                                </a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">4</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">
-                                    <i class="fas fa-chevron-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+                <!-- Hapus data hardcoded: Kartu donasi dummy & pagination dummy sudah dihapus, seluruh data donasi kini berasal dari database. -->
             </div>
         </div>
     </div>
 </div>
 
 <!-- Mobile Filters Toggle Button -->
-<div class="mobile-filters-toggle" id="showMobileFilters">
-    <i class="fas fa-filter"></i>
+<div class="mobile-filters-toggle" id="showMobileFilters" role="button" tabindex="0" aria-label="Tampilkan Filter Mobile">
+    <i class="fas fa-filter" aria-hidden="true"></i>
 </div>
 
 <!-- Mobile Filters Panel -->
 <div class="mobile-filters" id="mobileFiltersPanel">
     <div class="mobile-filters-header">
         <h4 class="mobile-filters-title">Filter</h4>
-        <div class="mobile-filters-close" id="closeMobileFilters">
-            <i class="fas fa-times"></i>
+        <div class="mobile-filters-close" id="closeMobileFilters" role="button" tabindex="0" aria-label="Tutup Filter Mobile">
+            <i class="fas fa-times" aria-hidden="true"></i>
         </div>
     </div>
     <div class="mobile-filters-body">
-        <!-- Copy of the same filter form here -->
-        <form id="mobileFilterForm">
+        <form id="mobileFilterForm" action="{{ route('find-donations') }}" method="GET">
+            @if(request('search'))
+            <input type="hidden" name="search" value="{{ request('search') }}">
+            @endif
             <div class="filter-group">
                 <label class="filter-label">Kategori Makanan</label>
                 <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" value="all" id="mobileCategoryAll" checked>
-                    <label class="form-check-label" for="mobileCategoryAll">
-                        Semua Kategori
-                    </label>
+                    <input class="form-check-input" type="radio" name="category" value="all" id="mobileCategoryAll" {{ request('category', 'all') == 'all' ? 'checked' : '' }}>
+                    <label class="form-check-label" for="mobileCategoryAll">Semua Kategori</label>
                 </div>
                 <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" value="makanan-siap-saji" id="mobileCategorySiapSaji">
-                    <label class="form-check-label" for="mobileCategorySiapSaji">
-                        Makanan Siap Saji
-                    </label>
+                    <input class="form-check-input" type="radio" name="category" value="makanan-siap-saji" id="mobileCategorySiapSaji" {{ request('category') == 'makanan-siap-saji' ? 'checked' : '' }}>
+                    <label class="form-check-label" for="mobileCategorySiapSaji">Makanan Siap Saji</label>
                 </div>
                 <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" value="bahan-makanan" id="mobileCategoryBahan">
-                    <label class="form-check-label" for="mobileCategoryBahan">
-                        Bahan Makanan
-                    </label>
+                    <input class="form-check-input" type="radio" name="category" value="bahan-makanan" id="mobileCategoryBahan" {{ request('category') == 'bahan-makanan' ? 'checked' : '' }}>
+                    <label class="form-check-label" for="mobileCategoryBahan">Bahan Makanan</label>
                 </div>
                 <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" value="roti-kue" id="mobileCategoryRoti">
-                    <label class="form-check-label" for="mobileCategoryRoti">
-                        Roti & Kue
-                    </label>
+                    <input class="form-check-input" type="radio" name="category" value="roti-kue" id="mobileCategoryRoti" {{ request('category') == 'roti-kue' ? 'checked' : '' }}>
+                    <label class="form-check-label" for="mobileCategoryRoti">Roti & Kue</label>
                 </div>
                 <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" value="buah-sayur" id="mobileCategoryBuah">
-                    <label class="form-check-label" for="mobileCategoryBuah">
-                        Buah & Sayur
-                    </label>
+                    <input class="form-check-input" type="radio" name="category" value="buah-sayur" id="mobileCategoryBuah" {{ request('category') == 'buah-sayur' ? 'checked' : '' }}>
+                    <label class="form-check-label" for="mobileCategoryBuah">Buah & Sayur</label>
                 </div>
                 <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" value="makanan-kaleng" id="mobileCategoryKaleng">
-                    <label class="form-check-label" for="mobileCategoryKaleng">
-                        Makanan Kaleng
-                    </label>
+                    <input class="form-check-input" type="radio" name="category" value="makanan-kaleng" id="mobileCategoryKaleng" {{ request('category') == 'makanan-kaleng' ? 'checked' : '' }}>
+                    <label class="form-check-label" for="mobileCategoryKaleng">Makanan Kaleng</label>
                 </div>
                 <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" value="minuman" id="mobileCategoryMinuman">
-                    <label class="form-check-label" for="mobileCategoryMinuman">
-                        Minuman
-                    </label>
+                    <input class="form-check-input" type="radio" name="category" value="minuman" id="mobileCategoryMinuman" {{ request('category') == 'minuman' ? 'checked' : '' }}>
+                    <label class="form-check-label" for="mobileCategoryMinuman">Minuman</label>
                 </div>
             </div>
-            
             <div class="filter-group">
                 <label class="filter-label">Jarak (km)</label>
                 <div class="range-inputs">
-                    <input type="number" class="form-control" id="mobileDistanceMin" placeholder="Min" min="0" max="100">
+                    <input type="number" class="form-control" id="mobileDistanceMin" name="distance_min" placeholder="Min" min="0" max="100" value="{{ request('distance_min') }}">
                     <span class="range-dash">-</span>
-                    <input type="number" class="form-control" id="mobileDistanceMax" placeholder="Max" min="0" max="100">
+                    <input type="number" class="form-control" id="mobileDistanceMax" name="distance_max" placeholder="Max" min="0" max="100" value="{{ request('distance_max') }}">
                 </div>
             </div>
-            
             <div class="filter-group">
                 <label class="filter-label">Status</label>
                 <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="mobileStatus" id="mobileStatusAll" value="all" checked>
-                    <label class="form-check-label" for="mobileStatusAll">
-                        Semua
-                    </label>
+                    <input class="form-check-input" type="radio" name="status" id="mobileStatusAll" value="all" {{ request('status', 'all') == 'all' ? 'checked' : '' }}>
+                    <label class="form-check-label" for="mobileStatusAll">Semua</label>
                 </div>
                 <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="mobileStatus" id="mobileStatusAvailable" value="available">
-                    <label class="form-check-label" for="mobileStatusAvailable">
-                        Tersedia
-                    </label>
+                    <input class="form-check-input" type="radio" name="status" id="mobileStatusAvailable" value="available" {{ request('status') == 'available' ? 'checked' : '' }}>
+                    <label class="form-check-label" for="mobileStatusAvailable">Tersedia</label>
                 </div>
             </div>
-            
             <div class="filter-group">
                 <label class="filter-label">Waktu Pengambilan</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" id="mobilePickupDate" placeholder="Pilih tanggal">
+                    <input type="text" class="form-control" id="mobilePickupDate" name="pickup_date" placeholder="Pilih tanggal" value="{{ request('pickup_date') }}">
                     <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                 </div>
             </div>
-            
             <div class="filter-group">
                 <label class="filter-label">Kuantitas Minimum</label>
-                <input type="number" class="form-control" id="mobileQuantityMin" placeholder="Jumlah minimum" min="1">
+                <input type="number" class="form-control" id="mobileQuantityMin" name="quantity_min" placeholder="Jumlah minimum" min="1" value="{{ request('quantity_min') }}">
             </div>
+            <input type="hidden" name="sort" id="mobileSortInput" value="{{ request('sort', 'nearest') }}">
+            <button type="submit" class="btn btn-primary btn-filter w-100" id="applyMobileFilters">
+                <i class="fas fa-filter me-2"></i>Terapkan Filter
+            </button>
         </form>
     </div>
     <div class="mobile-filters-actions">
         <button type="button" class="btn btn-outline-secondary w-50" id="resetMobileFilters">
             <i class="fas fa-redo-alt me-2"></i>Reset
         </button>
-        <button type="button" class="btn btn-primary w-50" id="applyMobileFilters">
+        <button type="button" class="btn btn-primary w-50" id="applyMobileFiltersBtn">
             <i class="fas fa-filter me-2"></i>Terapkan
         </button>
     </div>
@@ -1057,45 +385,34 @@
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 
 <script>
-    $(document).ready(function() {
-        // Initialize date picker
-        flatpickr("#pickupDate, #mobilePickupDate", {
-            enableTime: false,
-            dateFormat: "Y-m-d",
-            minDate: "today",
-            allowInput: true
-        });
-        
-        // Initialize Map
-        let map = L.map('donationMap').setView([-6.200000, 106.816666], 13); // Jakarta coordinates
-        let isFullMap = false;
-        let userMarker = null;
-        let donationMarkers = [];
-        
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-        
-        // Custom icon for food donation markers
-        const foodIcon = L.icon({
-            iconUrl: '{{ asset('assets/images/food-marker.png') }}',
-            iconSize: [32, 32],
-            iconAnchor: [16, 32],
-            popupAnchor: [0, -32]
-        });
-        
-        // Add donation markers from database
+    // Data untuk JS eksternal
+    const foodMarkerUrl = "{{ asset('assets/images/food-marker.png') }}";
+    const userMarkerUrl = "{{ asset('assets/images/user-marker.png') }}";
+    const getNearbyDonationsUrl = "{{ route('get-nearby-donations') }}";
+    const findDonationsUrl = "{{ route('find-donations') }}";
+    // Data filter untuk AJAX (hanya contoh, bisa dikembangkan sesuai kebutuhan)
+    const filterAjaxData = {
+        search: "{{ request('search') }}",
+        category: "{{ request('category') }}",
+        status: "{{ request('status') }}",
+        pickup_date: "{{ request('pickup_date') }}",
+        quantity_min: "{{ request('quantity_min') }}"
+    };
+    // Data marker donasi untuk map (dari server)
+    const donationMarkersData = [
         @if(isset($donations))
             @foreach($donations as $donation)
                 @if($donation->latitude && $donation->longitude)
-                    let marker = L.marker([{{ $donation->latitude }}, {{ $donation->longitude }}], {icon: foodIcon}).addTo(map);
-                    
-                    let popupContent = `
+                {
+                    latitude: {{ $donation->latitude }},
+                    longitude: {{ $donation->longitude }},
+                    popupContent: `
                         <div class="map-popup">
                             <div class="map-popup-image">
                                 <img src="{{ $donation->image ? asset('storage/' . $donation->image) : asset('assets/images/food-placeholder.jpg') }}" alt="{{ $donation->food_name }}">
                             </div>
-                            <div class="map-popup-content">                                <h5 class="map-popup-title">{{ $donation->food_name }}</h5>
+                            <div class="map-popup-content">
+                                <h5 class="map-popup-title">{{ $donation->food_name }}</h5>
                                 <div class="map-popup-meta">
                                     <span><i class="fas fa-calendar"></i> {{ \Carbon\Carbon::parse($donation->expiration_date)->diffForHumans() }}</span>
                                     <span><i class="fas fa-box"></i> {{ $donation->quantity }}</span>
@@ -1112,187 +429,102 @@
                                 </div>
                             </div>
                         </div>
-                    `;
-                    
-                    marker.bindPopup(popupContent, {
-                        className: 'custom-marker-popup',
-                        maxWidth: 250
-                    });
-                    
-                    donationMarkers.push(marker);
+                    `
+                },
                 @endif
             @endforeach
-            
-            // Fit bounds if we have markers
-            if (donationMarkers.length > 0) {
-                const group = new L.featureGroup(donationMarkers);
-                map.fitBounds(group.getBounds().pad(0.1));
-            }
         @endif
-        
-        // Center map on user's location
-        $('#centerMap').click(function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-                    
-                    // Update the map view
-                    map.setView([lat, lng], 14);
-                    
-                    // Add or update user marker
-                    if (userMarker) {
-                        userMarker.setLatLng([lat, lng]);
-                    } else {
-                        const userIcon = L.icon({
-                            iconUrl: '{{ asset('assets/images/user-marker.png') }}',
-                            iconSize: [32, 32],
-                            iconAnchor: [16, 32]
-                        });
-                        
-                        userMarker = L.marker([lat, lng], {icon: userIcon}).addTo(map);
-                        userMarker.bindPopup("Lokasi Anda").openPopup();
-                    }
-                    
-                    // Store location in localStorage for future use
-                    localStorage.setItem('userLat', lat);
-                    localStorage.setItem('userLng', lng);
-                    
-                    // Send the location to the server for distance calculations via AJAX
-                    // Only if we're not already filtering by location parameters
-                    if (!$('#distanceMin').val() && !$('#distanceMax').val()) {
-                        $.ajax({
-                            url: '{{ route('get-nearby-donations') }}',
-                            method: 'GET',
-                            data: {
-                                lat: lat,
-                                lng: lng,
-                                search: '{{ request('search') }}',
-                                category: '{{ request('category') }}',
-                                status: '{{ request('status') }}',
-                                pickup_date: '{{ request('pickup_date') }}',
-                                quantity_min: '{{ request('quantity_min') }}'
-                            },
-                            success: function(response) {
-                                // You could update the UI with the results if needed
-                                console.log('Nearby donations received');
-                            },
-                            error: function(xhr) {
-                                console.error('Error fetching nearby donations');
-                            }
-                        });
-                    }
-                    
-                }, function(error) {
-                    switch(error.code) {
-                        case error.PERMISSION_DENIED:
-                            alert("Izin lokasi ditolak. Silakan aktifkan akses lokasi di browser Anda.");
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            alert("Informasi lokasi tidak tersedia.");
-                            break;
-                        case error.TIMEOUT:
-                            alert("Permintaan untuk mendapatkan lokasi pengguna habis waktu.");
-                            break;
-                        case error.UNKNOWN_ERROR:
-                            alert("Terjadi kesalahan yang tidak diketahui.");
-                            break;
-                    }
-                });
-            } else {
-                alert("Geolocation tidak didukung oleh browser Anda.");
-            }
-        });
-        
-        // For automatic location detection when page loads
-        $(window).on('load', function() {
-            // Check if we should auto-detect location (only on first visit)
-            if (!localStorage.getItem('locationAsked')) {
-                if (confirm("Apakah Anda ingin mengizinkan aplikasi untuk mendeteksi lokasi Anda untuk mendapatkan donasi terdekat?")) {
-                    $('#centerMap').click();
-                }
-                localStorage.setItem('locationAsked', 'true');
-            }
-        });
-        
-        // Toggle full map view
-        $('#toggleFullMap').click(function() {
-            const mapContainer = $('.search-map-container');
-            const mapElement = $('#donationMap');
-            
-            if (isFullMap) {
-                // Return to normal size
-                mapContainer.css({
-                    'position': 'relative',
-                    'z-index': '1',
-                    'width': '100%',
-                    'height': 'auto'
-                });
-                mapElement.css('height', '400px');
-                $(this).html('<i class="fas fa-expand"></i>');
-                isFullMap = false;
-            } else {
-                // Expand to full size
-                mapContainer.css({
-                    'position': 'fixed',
-                    'top': '0',
-                    'left': '0',
-                    'right': '0',
-                    'bottom': '0',
-                    'z-index': '1000',
-                    'width': '100%',
-                    'height': '100vh',
-                    'margin': '0',
-                    'border-radius': '0'
-                });
-                mapElement.css('height', 'calc(100vh - 70px)');
-                $(this).html('<i class="fas fa-compress"></i>');
-                isFullMap = true;
-            }
-            
-            // Make sure the map renders correctly after resize
-            setTimeout(function() {
-                map.invalidateSize();
-            }, 100);
-        });
-        
-        // Mobile filters toggle
-        $('#showMobileFilters').click(function() {
-            $('#mobileFiltersPanel').css('display', 'block');
-        });
-        
-        $('#closeMobileFilters').click(function() {
-            $('#mobileFiltersPanel').css('display', 'none');
-        });
-        
-        // Sort dropdown change handler
-        $('#sortResults').change(function() {
-            const sortValue = $(this).val();
-            $('#sortInput').val(sortValue);
-            $('#filterForm').submit();        
-        });
-        
-        // Reset filters
-        $('#resetFilters, #resetMobileFilters').click(function(e) {
-            e.preventDefault();
-            window.location.href = '{{ route('find-donations') }}';
-        });
-        
-        // Search button
-        $('#searchBtn').click(function() {
-            $('#filterForm').submit();        
-        });
-        
-        // Allow pressing Enter in search box
-        $('#searchKeyword').keypress(function(e) {
-            if (e.which === 13) { // Enter key
-                $('#searchBtn').click();
-                return false;
-            }
-        });
-        
-        // Initialize with "All" category selected
-        $('#categoryAll, #mobileCategoryAll').change();
-    });
+    ];
+</script>
+<script src="{{ asset('assets/js/find-donations.js') }}"></script>
+
+@push('css')
+<link rel="stylesheet" href="{{ asset('assets/css/find-donations.css') }}">
+<style>
+/* Indikator loading filter */
+#filterLoadingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255,255,255,0.7);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+#filterLoadingOverlay .spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+/* Responsive improvement for filter sidebar */
+@media (max-width: 992px) {
+  .search-filters { display: none !important; }
+  .mobile-filters-toggle { display: flex !important; }
+}
+@media (max-width: 768px) {
+  .donation-results-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .donation-results-sort { width: 100%; justify-content: space-between; }
+}
+</style>
+@endpush
+<div id="filterLoadingOverlay" aria-label="Memuat hasil pencarian" role="status">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+<script>
+// Tampilkan indikator loading saat filter/submit & validasi
+$(function() {
+  function showLoading() {
+    $('#filterLoadingOverlay').fadeIn(100);
+  }
+  function hideLoading() {
+    $('#filterLoadingOverlay').fadeOut(100);
+  }
+  // Validasi filter (desktop & mobile)
+  function validateFilter(form) {
+    let valid = true;
+    // Jarak
+    let min = parseFloat($(form).find('[name="distance_min"]').val());
+    let max = parseFloat($(form).find('[name="distance_max"]').val());
+    if (!isNaN(min) && !isNaN(max) && min > max) {
+      alert('Jarak minimum tidak boleh lebih besar dari maksimum.');
+      valid = false;
+    }
+    // Kuantitas
+    let qmin = parseFloat($(form).find('[name="quantity_min"]').val());
+    if (!isNaN(qmin) && qmin < 1) {
+      alert('Kuantitas minimum harus lebih dari 0.');
+      valid = false;
+    }
+    // Tanggal (optional, validasi format)
+    let date = $(form).find('[name="pickup_date"]').val();
+    if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      alert('Format tanggal tidak valid.');
+      valid = false;
+    }
+    return valid;
+  }
+  // Form desktop
+  $('#filterForm').on('submit', function(e) {
+    if (!validateFilter(this)) { e.preventDefault(); return false; }
+    showLoading();
+  });
+  // Form mobile
+  $('#mobileFilterForm').on('submit', function(e) {
+    if (!validateFilter(this)) { e.preventDefault(); return false; }
+    showLoading();
+  });
+  // Search form
+  $('form[action="{{ route('find-donations') }}"][method="GET"]').on('submit', function() {
+    showLoading();
+  });
+  // Sembunyikan loading saat halaman selesai
+  $(window).on('pageshow load', function() {
+    hideLoading();
+  });
+});
 </script>
 @endpush
